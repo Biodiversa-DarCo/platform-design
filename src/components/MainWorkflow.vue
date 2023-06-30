@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import type { Ref } from 'vue'
-import type { Data } from '@/components/MultipleHandleNode.vue'
 import type { Node as FlowNode, Edge } from '@vue-flow/core'
+import type { WorkflowNodeData } from './MainWorkflowNode.vue'
 
-import { ref, readonly, markRaw } from 'vue'
+import { ref, markRaw } from 'vue'
 import { VueFlow, Position, useVueFlow, MarkerType } from '@vue-flow/core'
-import MultipleHandleNode from '@/components/MultipleHandleNode.vue'
-import SamplingWorkflow from '@/components/SamplingWorkflow.vue'
-import { computed } from 'vue'
+import SamplingWorkflow from '@/components/workflows/SamplingWorkflow.vue'
+import MainWorkflowNode from './MainWorkflowNode.vue'
+import BioMatWorkflow from './workflows/BioMatWorkflow.vue'
 
 const { onPaneReady, addSelectedNodes } = useVueFlow({
   defaultViewport: { zoom: 0.55 },
@@ -22,7 +22,7 @@ const X_OFFSET = 0
 
 const TRUNK_X_POS = 300
 
-interface Node extends FlowNode<Data> {}
+interface Node extends FlowNode<WorkflowNodeData> {}
 
 const nodeDefinitions: Node[] = [
   {
@@ -32,7 +32,7 @@ const nodeDefinitions: Node[] = [
     position: { x: TRUNK_X_POS, y: 0 },
     data: {
       handles: [{ id: 'bot', type: 'source', position: Position.Bottom }],
-      icon: 'fa-mountain',
+      icon: 'fa-bucket',
       component: markRaw(SamplingWorkflow)
     }
   },
@@ -42,7 +42,8 @@ const nodeDefinitions: Node[] = [
     label: 'Biological material',
     position: { x: TRUNK_X_POS, y: 200 },
     data: {
-      icon: 'fa-box'
+      icon: 'fa-box',
+      component: markRaw(BioMatWorkflow)
     }
   },
   {
@@ -109,10 +110,9 @@ const nodeDefinitions: Node[] = [
 ]
 
 const nodes: Ref<Node[]> = ref(
-  nodeDefinitions.map<Node>(({ position: { x, y }, data, ...rest }) => ({
+  nodeDefinitions.map<Node>(({ position: { x, y }, ...rest }) => ({
     position: { x: x + X_OFFSET, y },
     width: 300,
-    data: { selectable: true, ...data },
     // height: 100,
     ...rest
   }))
@@ -215,13 +215,13 @@ const edges: Ref<Edge[]> = ref(
       }
     "
   >
-    <template #node-custom="$props">
-      <MultipleHandleNode v-bind="readonly($props)" />
+    <template #node-custom="{ data, label, selected }">
+      <MainWorkflowNode v-bind="{ label, selected, ...data }" />
     </template>
   </VueFlow>
 </template>
 
-<style>
+<style lang="less">
 /* these are necessary styles for vue flow */
 @import '@vue-flow/core/dist/style.css';
 
