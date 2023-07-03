@@ -1,22 +1,30 @@
 <template>
-  <div>
-    Sample collection is the starting point of the research workflow. A sampling operation is done
-    on a site, whose coordinates and location are kept track of, as well as some descriptive
-    variables such as the habitat type (e.g. subterranean freshwater, river). It targets one or
-    several taxonomic groups.
+  <v-container>
+    <h1 class="text-h4">Sampling</h1>
+    <v-divider class="my-3"></v-divider>
+    <p class="mb-3">
+      Sample collection is the starting point of the research workflow. A sampling operation is done
+      on a site, whose coordinates and location are kept track of, as well as some descriptive
+      variables such as the habitat type (e.g. subterranean freshwater, river). It targets one or
+      several taxonomic groups.
+    </p>
+    <p class="mb-3">
+      A sampling operation provides one or several bundles of
+      <a href="" @click.prevent="$emit('goToWorkflow', 'biomat')">biological material</a>.
+    </p>
 
     <DetailWorkflow :nodes="nodes" :edges="edges" v-bind="$attrs" />
-  </div>
+  </v-container>
 </template>
 
 <script setup lang="ts">
 import type { Edge } from '@vue-flow/core'
-import type { Node } from '../DetailWorkflow.vue'
+import type { Node } from '@/components/DetailWorkflow.vue'
 
 import { ref } from 'vue'
 import { Position } from '@vue-flow/core'
-import { defaultHandles } from '../MultipleHandleNode.vue'
-import DetailWorkflow from '../DetailWorkflow.vue'
+import { defaultHandles } from '@/components/MultipleHandleNode.vue'
+import DetailWorkflow from '@/components/DetailWorkflow.vue'
 
 const nodeDefinitions: Node[] = [
   {
@@ -84,7 +92,7 @@ const nodeDefinitions: Node[] = [
     data: {
       icon: 'fa-box',
       handles: defaultHandles().filter(({ id }) => id === 'top'),
-      link: true
+      target: 'biomat'
     }
   }
 ]
@@ -97,7 +105,8 @@ const edges: Edge[] = [
     source: 'sampling',
     target: 'biomat',
     sourceHandle: 'bot',
-    targetHandle: 'top'
+    targetHandle: 'top',
+    animated: true
   },
   {
     id: 'location-sampling',

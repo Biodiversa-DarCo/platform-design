@@ -1,5 +1,5 @@
 <template>
-  <v-card class="node-card" :class="link ? 'link' : ''" height="100%">
+  <v-card class="node-card">
     <v-card-item :prepend-icon="'fas ' + icon">
       <v-card-title class="node-label">
         <span>{{ label }}</span>
@@ -18,7 +18,7 @@ export type WorkflowNodeData = {
   icon?: string
   handles?: HandleSpec[]
   items?: object[]
-  link?: boolean
+  target?: string
 }
 
 defineProps<WorkflowNodeData & { label: string }>()

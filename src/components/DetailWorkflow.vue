@@ -1,7 +1,8 @@
 <template>
   <VueFlow :nodes="nodes" :edges="edges" fit-view-on-init @node-click="nodeClick">
     <template #node-custom="{ data, label }">
-      <DetailWorkflowNode v-bind="{ label, ...data }" />
+      <MainWorkflowNode v-if="data.target" v-bind="{ label, ...data, active: false }" />
+      <DetailWorkflowNode v-else v-bind="{ label, ...data }" />
     </template>
   </VueFlow>
 </template>
@@ -15,6 +16,7 @@ export interface Node extends FlowNode<WorkflowNodeData> {}
 import type { Edge, Node as FlowNode, NodeMouseEvent } from '@vue-flow/core'
 import { VueFlow, useVueFlow } from '@vue-flow/core'
 import DetailWorkflowNode from './DetailWorkflowNode.vue'
+import MainWorkflowNode from './MainWorkflowNode.vue'
 
 useVueFlow({ id: 'sampling' })
 

@@ -3,13 +3,16 @@ import type { Ref } from 'vue'
 import type { Node as FlowNode, Edge } from '@vue-flow/core'
 import type { WorkflowNodeData } from './MainWorkflowNode.vue'
 
-import { ref, markRaw } from 'vue'
-import { VueFlow, Position, useVueFlow, MarkerType } from '@vue-flow/core'
-import SamplingWorkflow from '@/components/workflows/SamplingWorkflow.vue'
-import MainWorkflowNode from './MainWorkflowNode.vue'
-import BioMatWorkflow from './workflows/BioMatWorkflow.vue'
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
-const { onPaneReady, addSelectedNodes } = useVueFlow({
+import { VueFlow, Position, useVueFlow, MarkerType } from '@vue-flow/core'
+import MainWorkflowNode from './MainWorkflowNode.vue'
+import { computed } from 'vue'
+
+const router = useRouter()
+
+const { onPaneReady, getSelectedNodes, addSelectedNodes, findNode } = useVueFlow({
   defaultViewport: { zoom: 0.55 },
   maxZoom: 4,
   minZoom: 0.1
@@ -33,7 +36,7 @@ const nodeDefinitions: Node[] = [
     data: {
       handles: [{ id: 'bot', type: 'source', position: Position.Bottom }],
       icon: 'fa-bucket',
-      component: markRaw(SamplingWorkflow)
+      target: 'sampling'
     }
   },
   {
@@ -43,7 +46,7 @@ const nodeDefinitions: Node[] = [
     position: { x: TRUNK_X_POS, y: 200 },
     data: {
       icon: 'fa-box',
-      component: markRaw(BioMatWorkflow)
+      target: 'biomat'
     }
   },
   {
@@ -52,7 +55,8 @@ const nodeDefinitions: Node[] = [
     type: 'custom',
     position: { x: TRUNK_X_POS, y: 400 },
     data: {
-      icon: 'fa-locust'
+      icon: 'fa-locust',
+      target: 'specimen'
     }
   },
   {
@@ -61,7 +65,8 @@ const nodeDefinitions: Node[] = [
     label: 'Sequencing',
     position: { x: TRUNK_X_POS, y: 600 },
     data: {
-      icon: 'fa-dna'
+      icon: 'fa-dna',
+      target: 'sequencing'
     }
   },
   {
@@ -77,7 +82,8 @@ const nodeDefinitions: Node[] = [
         { type: 'target', id: 'handleTop', position: Position.Top },
         { type: 'target', id: 'handleBot', position: Position.Bottom }
       ],
-      icon: 'fa-fingerprint'
+      icon: 'fa-fingerprint',
+      target: 'identification'
     }
   },
   {
@@ -89,7 +95,8 @@ const nodeDefinitions: Node[] = [
     targetPosition: Position.Left,
     data: {
       handles: [{ type: 'target', id: 'handle', position: Position.Left }],
-      icon: 'fa-tags'
+      icon: 'fa-tags',
+      target: 'motu'
     }
   },
   {
@@ -104,15 +111,18 @@ const nodeDefinitions: Node[] = [
         { type: 'target', id: 'handleTop', position: Position.Top },
         { type: 'target', id: 'handleBot', position: Position.Bottom }
       ],
-      icon: 'fa-boxes-stacked'
+      icon: 'fa-boxes-stacked',
+      target: 'storage'
     }
   }
 ]
 
 const nodes: Ref<Node[]> = ref(
-  nodeDefinitions.map<Node>(({ position: { x, y }, ...rest }) => ({
+  nodeDefinitions.map<Node>(({ position: { x, y }, data, ...rest }) => ({
     position: { x: x + X_OFFSET, y },
     width: 300,
+    selected: router.currentRoute.value.name === data?.target,
+    data,
     // height: 100,
     ...rest
   }))
@@ -201,22 +211,14 @@ const edges: Ref<Edge[]> = ref(
     ...edge
   }))
 )
+
+const activeNodeName = computed(() => router.currentRoute.value.name)
 </script>
 
 <template>
-  <VueFlow
-    :nodes="nodes"
-    :edges="edges"
-    :default-zoom="0.2"
-    fit-view-on-init
-    @nodeClick="
-      ({ node }) => {
-        addSelectedNodes([node])
-      }
-    "
-  >
-    <template #node-custom="{ data, label, selected }">
-      <MainWorkflowNode v-bind="{ label, selected, ...data }" />
+  <VueFlow :nodes="nodes" :edges="edges" v-bind="$attrs" fit-view-on-init>
+    <template #node-custom="{ data, label, id }">
+      <MainWorkflowNode v-bind="{ label, active: id === activeNodeName, ...data }" />
     </template>
   </VueFlow>
 </template>

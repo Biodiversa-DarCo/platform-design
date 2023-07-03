@@ -1,37 +1,33 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import { ref } from 'vue'
-// import HelloWorld from './components/HelloWorld.vue'
+import MainWorkflow from './components/MainWorkflow.vue'
 
 let drawer = ref(false)
 </script>
 
 <template>
   <v-app>
-    <v-navigation-drawer v-model="drawer">
-      <v-list nav>
-        <v-list-item>
-          <template v-slot:prepend>
-            <RouterLink to="/">Home</RouterLink>
-          </template>
-        </v-list-item>
-        <v-list-item>
-          <template v-slot:prepend>
-            <RouterLink to="/workflow">Workflow visualisation</RouterLink>
-          </template>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-
     <v-app-bar color="indigo">
       <v-app-bar-nav-icon variant="text" @click="drawer = !drawer"></v-app-bar-nav-icon>
-      <v-toolbar-title>DarCo Workflow</v-toolbar-title>
+      <RouterLink to="/" custom v-slot="{ navigate }">
+        <button @click="navigate">
+          <v-toolbar-title @click="navigate">DarCo Workflow</v-toolbar-title>
+        </button>
+      </RouterLink>
     </v-app-bar>
-
+    <v-navigation-drawer width="800" v-model="drawer" temporary>
+      <MainWorkflow
+        :zoom-on-scroll="false"
+        :pan-on-drag="false"
+        :nodes-draggable="false"
+        :style="{ height: '100%' }"
+      ></MainWorkflow>
+    </v-navigation-drawer>
     <v-main>
       <RouterView />
     </v-main>
   </v-app>
 </template>
 
-<style scoped></style>
+<style scoped lang="less"></style>

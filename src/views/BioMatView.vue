@@ -1,26 +1,29 @@
 <template>
-  <div class="text-body-1">
-    <p class="mb-3">
-      A sampling operation provides one or several bundles of biological material. A biological
-      material bundle contains several specimens that are all identified to a single taxonomic group
-      (at least at this point, see the Identification workflow).
-    </p>
-    <p class="mb-">
-      Functional traits can be attached to a biological material bundle to describe specimens it
-      contains.
-    </p>
-  </div>
-  <DetailWorkflow :nodes="nodes" :edges="edges" v-bind="$attrs" />
+  <v-container>
+    <h1 class="text-h4">Biological material</h1>
+    <v-divider class="my-3"></v-divider>
+    <div class="text-body-1">
+      <p class="mb-3">
+        A biological material bundle contains several specimens that are all identified to a single
+        taxonomic group (at least at this point, see the Identification workflow).
+      </p>
+      <p class="mb-">
+        Functional traits can be attached to a biological material bundle to describe specimens it
+        contains.
+      </p>
+    </div>
+    <DetailWorkflow :nodes="nodes" :edges="edges" v-bind="$attrs" />
+  </v-container>
 </template>
 
 <script setup lang="ts">
-import type { WorkflowNodeData } from '../DetailWorkflowNode.vue'
+import type { WorkflowNodeData } from '@/components/DetailWorkflowNode.vue'
 import { Position, type Edge, type Node as FlowNode } from '@vue-flow/core'
 
 import { ref } from 'vue'
 import { useVueFlow } from '@vue-flow/core'
-import DetailWorkflow from '../DetailWorkflow.vue'
-import { defaultHandles } from '../MultipleHandleNode.vue'
+import DetailWorkflow from '@/components/DetailWorkflow.vue'
+import { defaultHandles } from '@/components/MultipleHandleNode.vue'
 
 useVueFlow({ id: 'biomat' })
 
@@ -34,7 +37,7 @@ const nodeDefinitions: Node[] = [
     position: { x: 300, y: 0 },
     data: {
       icon: 'fa-bucket',
-      link: true,
+      target: 'sampling',
       handles: defaultHandles().filter(({ id }) => id === 'bot')
     }
   },
@@ -77,18 +80,18 @@ const nodeDefinitions: Node[] = [
     data: {
       icon: 'fa-locust',
       handles: defaultHandles().filter(({ id }) => id === 'top'),
-      link: true
+      target: 'specimen'
     }
   },
   {
     id: 'identification',
     type: 'custom',
     label: 'Identification',
-    position: { x: 700, y: 300 },
+    position: { x: 700, y: 400 },
     data: {
       icon: 'fa-fingerprint',
       handles: defaultHandles().filter(({ id }) => id === 'left'),
-      link: true
+      target: 'identification'
     }
   },
   {
@@ -99,14 +102,14 @@ const nodeDefinitions: Node[] = [
     data: {
       icon: 'fa-boxes',
       handles: defaultHandles().filter(({ id }) => id === 'right'),
-      link: true
+      target: 'storage'
     }
   },
   {
     id: 'traits',
     type: 'custom',
     label: 'Functional traits',
-    position: { x: 700, y: 0 },
+    position: { x: 700, y: 100 },
     data: {
       icon: 'fa-list',
       handles: defaultHandles().filter(({ id }) => id === 'left'),
@@ -124,7 +127,8 @@ const edges: Edge[] = [
     target: 'biomat',
     sourceHandle: 'bot',
     targetHandle: 'top',
-    label: 'provides'
+    label: 'provides',
+    animated: true
   },
   {
     id: 'biomat-specimen',
@@ -132,7 +136,8 @@ const edges: Edge[] = [
     target: 'specimen',
     sourceHandle: 'bot',
     targetHandle: 'top',
-    label: 'contains'
+    label: 'contains',
+    animated: true
   },
   {
     id: 'biomat-id',
@@ -146,7 +151,8 @@ const edges: Edge[] = [
     source: 'biomat',
     target: 'storage',
     sourceHandle: 'left',
-    targetHandle: 'right'
+    targetHandle: 'right',
+    animated: true
   },
   {
     id: 'biomat-traits',
