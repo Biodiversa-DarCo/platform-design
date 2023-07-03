@@ -2,7 +2,7 @@
   <v-card class="node-card">
     <v-card-item :prepend-icon="'fas ' + icon">
       <v-card-title class="node-label">
-        <span>{{ label }}</span>
+        <span class="text-overline">{{ label }}</span>
       </v-card-title>
     </v-card-item>
     <v-list v-if="items" density="compact" :items="items"></v-list>
@@ -25,13 +25,17 @@ defineProps<WorkflowNodeData & { label: string }>()
 </script>
 
 <style scoped lang="less">
-.node-card.link {
+.node-card {
   border-width: 3px;
-  border-color: slategray;
-  cursor: pointer;
-
-  &:hover {
-    border-color: purple;
-  }
+  border-color: rgb(30, 71, 104);
 }
+// .node-card.link {
+//   border-width: 3px;
+//   border-color: slategray;
+//   cursor: pointer;
+
+//   &:hover {
+//     border-color: purple;
+//   }
+// }
 </style>

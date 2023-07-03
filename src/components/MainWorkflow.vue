@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Ref } from 'vue'
+import type { Ref, ComputedRef } from 'vue'
 import type { Node as FlowNode, Edge } from '@vue-flow/core'
 import type { WorkflowNodeData } from './MainWorkflowNode.vue'
 
@@ -128,95 +128,91 @@ const nodes: Ref<Node[]> = ref(
   }))
 )
 
-const edges: Ref<Edge[]> = ref(
-  [
-    {
-      id: 'sampling-biomat',
-      source: 'sampling',
-      target: 'biomat',
-      animated: true
-      // style: { strokeWidth: '15px' }
-    },
-    {
-      id: 'biomat-specimen',
-      source: 'biomat',
-      target: 'specimen',
-      sourceHandle: 'bot',
-      targetHandle: 'top',
-      animated: true
-    },
-    {
-      id: 'specimen-seq',
-      source: 'specimen',
-      sourceHandle: 'bot',
-      target: 'sequencing',
-      animated: true
-    },
-    {
-      id: 'id-biomat',
-      type: 'step',
-      source: 'biomat',
-      target: 'identification',
-      sourceHandle: 'right',
-      targetHandle: 'handleTop',
-      animated: true
-    },
-    {
-      id: 'id-specimen',
-      type: 'step',
-      source: 'specimen',
-      sourceHandle: 'right',
-      target: 'identification',
-      animated: true
-    },
-    {
-      id: 'id-seq',
-      type: 'step',
-      source: 'sequencing',
-      target: 'identification',
-      sourceHandle: 'right',
-      targetHandle: 'handleBot',
-      animated: true
-    },
-    {
-      id: 'seq-motu',
-      type: 'step',
-      source: 'sequencing',
-      target: 'sp-hypotheses',
-      sourceHandle: 'bot',
-      animated: true
-    },
-    {
-      id: 'dna-storage',
-      type: 'step',
-      source: 'sequencing',
-      target: 'storage',
-      sourceHandle: 'left',
-      targetHandle: 'handleBot',
-      animated: true
-    },
-    { id: 'specimen-storage', type: 'step', source: 'specimen', target: 'storage', animated: true },
-    {
-      id: 'biomat-storage',
-      type: 'step',
-      source: 'biomat',
-      target: 'storage',
-      sourceHandle: 'left',
-      targetHandle: 'handleTop',
-      animated: true
-    }
-  ].map<Edge>((edge) => ({
-    style: { stroke: 'green', strokeWidth: '5px' },
-    markerEnd: MarkerType.ArrowClosed,
-    ...edge
-  }))
-)
+const edges: ComputedRef<Edge[]> = computed(() => [
+  {
+    id: 'sampling-biomat',
+    source: 'sampling',
+    target: 'biomat'
+  },
+  {
+    id: 'biomat-specimen',
+    source: 'biomat',
+    target: 'specimen',
+    sourceHandle: 'bot',
+    targetHandle: 'top'
+  },
+  {
+    id: 'specimen-seq',
+    source: 'specimen',
+    sourceHandle: 'bot',
+    target: 'sequencing'
+  },
+  {
+    id: 'id-biomat',
+    type: 'step',
+    source: 'biomat',
+    target: 'identification',
+    sourceHandle: 'right',
+    targetHandle: 'handleTop'
+  },
+  {
+    id: 'id-specimen',
+    type: 'step',
+    source: 'specimen',
+    sourceHandle: 'right',
+    target: 'identification'
+  },
+  {
+    id: 'id-seq',
+    type: 'step',
+    source: 'sequencing',
+    target: 'identification',
+    sourceHandle: 'right',
+    targetHandle: 'handleBot'
+  },
+  {
+    id: 'seq-motu',
+    type: 'step',
+    source: 'sequencing',
+    target: 'sp-hypotheses',
+    sourceHandle: 'bot'
+  },
+  {
+    id: 'dna-storage',
+    type: 'step',
+    source: 'sequencing',
+    target: 'storage',
+    sourceHandle: 'left',
+    targetHandle: 'handleBot'
+  },
+  { id: 'specimen-storage', type: 'step', source: 'specimen', target: 'storage' },
+  {
+    id: 'biomat-storage',
+    type: 'step',
+    source: 'biomat',
+    target: 'storage',
+    sourceHandle: 'left',
+    targetHandle: 'handleTop'
+  }
+])
 
 const activeNodeName = computed(() => router.currentRoute.value.name)
+
+const defaultEdgeOptions = {
+  style: { stroke: 'dodgerblue', strokeWidth: '3px' },
+  markerEnd: { type: MarkerType.ArrowClosed, color: 'dodgerblue' },
+  animated: true
+}
 </script>
 
 <template>
-  <VueFlow :nodes="nodes" :edges="edges" v-bind="$attrs" fit-view-on-init>
+  <VueFlow
+    :nodes="nodes"
+    :edges="edges"
+    v-bind="$attrs"
+    fit-view-on-init
+    :default-edge-options="defaultEdgeOptions"
+  >
     <template #node-custom="{ data, label, id }">
       <MainWorkflowNode v-bind="{ label, active: id === activeNodeName, ...data }" />
     </template>

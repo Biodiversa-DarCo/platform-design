@@ -38,7 +38,7 @@ const nodeDefinitions: Node[] = [
     data: {
       icon: 'fa-bucket',
       target: 'sampling',
-      handles: defaultHandles().filter(({ id }) => id === 'bot')
+      handles: defaultHandles(['bot'])
     }
   },
   {
@@ -79,7 +79,7 @@ const nodeDefinitions: Node[] = [
     position: { x: 300, y: 600 },
     data: {
       icon: 'fa-locust',
-      handles: defaultHandles().filter(({ id }) => id === 'top'),
+      handles: defaultHandles(['top']),
       target: 'specimen'
     }
   },
@@ -90,7 +90,7 @@ const nodeDefinitions: Node[] = [
     position: { x: 700, y: 400 },
     data: {
       icon: 'fa-fingerprint',
-      handles: defaultHandles().filter(({ id }) => id === 'left'),
+      handles: defaultHandles(['left']),
       target: 'identification'
     }
   },
@@ -101,7 +101,7 @@ const nodeDefinitions: Node[] = [
     position: { x: 0, y: 300 },
     data: {
       icon: 'fa-boxes',
-      handles: defaultHandles().filter(({ id }) => id === 'right'),
+      handles: defaultHandles(['right']),
       target: 'storage'
     }
   },
@@ -112,7 +112,7 @@ const nodeDefinitions: Node[] = [
     position: { x: 700, y: 100 },
     data: {
       icon: 'fa-list',
-      handles: defaultHandles().filter(({ id }) => id === 'left'),
+      handles: defaultHandles(['left']),
       items: [{ title: 'Kind' }, { title: 'Value' }]
     }
   }
@@ -162,7 +162,7 @@ const edges: Edge[] = [
     targetHandle: 'left',
     label: 'has some'
   }
-].map<Edge>((edge) => ({ type: 'step', ...edge }))
+]
 </script>
 
 <style scoped lang="less">

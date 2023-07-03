@@ -122,5 +122,5 @@ const edges: Edge[] = [
     sourceHandle: 'left',
     targetHandle: 'right'
   }
-].map<Edge>((edge) => ({ type: 'step', ...edge }))
+]
 </script>

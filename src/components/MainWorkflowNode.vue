@@ -7,7 +7,7 @@
       @click="navigate"
     >
       <v-card-item :prepend-icon="icon ? 'fas ' + icon : undefined">
-        <v-card-title class="node-label">
+        <v-card-title class="node-label text-overline">
           {{ label }}
         </v-card-title>
       </v-card-item>
@@ -37,6 +37,9 @@ defineProps<WorkflowNodeData & { label: string; active: boolean }>()
   cursor: pointer;
   border-width: 5px;
   border-color: rgb(55, 116, 116);
+  &:hover * {
+    color: purple;
+  }
 
   .node-label {
     // font-size: x-large;
@@ -45,7 +48,7 @@ defineProps<WorkflowNodeData & { label: string; active: boolean }>()
     align-items: center;
     hyphens: unset;
 
-    margin: 20px 0px;
+    margin: 10px 0px;
     word-wrap: break-word;
     overflow-wrap: break-word;
     width: 100%;
@@ -53,11 +56,8 @@ defineProps<WorkflowNodeData & { label: string; active: boolean }>()
     text-align: center;
     color: black;
     font-weight: bold;
+    font-size: x-large;
     text-decoration: none;
-
-    &:hover {
-      color: purple;
-    }
   }
 }
 </style>

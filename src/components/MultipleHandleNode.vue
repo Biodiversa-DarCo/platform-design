@@ -11,13 +11,16 @@ export type Data = {
   handles?: HandleSpec[]
 }
 
-export function defaultHandles(): HandleSpec[] {
-  return [
+export function defaultHandles(subset: string[] | undefined = undefined): HandleSpec[] {
+  const handles: HandleSpec[] = [
     { type: 'target', position: Position.Top, id: 'top' },
     { type: 'source', position: Position.Left, id: 'left' },
     { type: 'source', position: Position.Right, id: 'right' },
     { type: 'source', position: Position.Bottom, id: 'bot' }
   ]
+  return handles.filter<HandleSpec>(
+    (value): value is HandleSpec => !subset || subset.includes(value.id)
+  )
 }
 </script>
 <script setup lang="ts">

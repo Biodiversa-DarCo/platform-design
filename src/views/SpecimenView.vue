@@ -37,7 +37,7 @@ const nodeDefinitions: Node[] = [
     position: { x: 300, y: 0 },
     data: {
       icon: 'fa-bucket',
-      handles: defaultHandles().filter(({ id }) => id === 'bot'),
+      handles: defaultHandles(['bot']),
       target: 'biomat'
     }
   },
@@ -87,7 +87,7 @@ const nodeDefinitions: Node[] = [
     position: { x: 700, y: 400 },
     data: {
       icon: 'fa-fingerprint',
-      handles: defaultHandles().filter(({ id }) => id === 'left'),
+      handles: defaultHandles(['left']),
       target: 'identification'
     }
   },
@@ -98,7 +98,7 @@ const nodeDefinitions: Node[] = [
     position: { x: 0, y: 400 },
     data: {
       icon: 'fa-boxes',
-      handles: defaultHandles().filter(({ id }) => ['right', 'top'].includes(id)),
+      handles: defaultHandles(['top']),
       target: 'storage'
     }
   },
@@ -109,7 +109,7 @@ const nodeDefinitions: Node[] = [
     position: { x: 700, y: 100 },
     data: {
       icon: 'fa-list',
-      handles: defaultHandles().filter(({ id }) => id === 'left'),
+      handles: defaultHandles(['left']),
       items: [{ title: 'Kind' }, { title: 'Value' }]
     }
   },
@@ -117,10 +117,10 @@ const nodeDefinitions: Node[] = [
     id: 'slide',
     type: 'custom',
     label: 'Slide',
-    position: { x: 0, y: 100 },
+    position: { x: 0, y: 150 },
     data: {
       icon: 'fa-microscope',
-      handles: defaultHandles().filter(({ id }) => ['right', 'bot'].includes(id)),
+      handles: defaultHandles(['right', 'bot']),
       items: [{ title: 'Label' }, { title: 'Date' }]
     }
   },
@@ -131,7 +131,7 @@ const nodeDefinitions: Node[] = [
     position: { x: 300, y: 600 },
     data: {
       icon: 'fa-dna',
-      handles: defaultHandles().filter(({ id }) => id === 'top'),
+      handles: defaultHandles(['top']),
       target: 'sequencing'
     }
   }
@@ -155,14 +155,6 @@ const edges: Edge[] = [
     target: 'identification',
     sourceHandle: 'right',
     targetHandle: 'left'
-  },
-  {
-    id: 'specimen-storage',
-    source: 'specimen',
-    target: 'storage',
-    sourceHandle: 'left',
-    targetHandle: 'right',
-    animated: true
   },
   {
     id: 'specimen-traits',
@@ -195,7 +187,7 @@ const edges: Edge[] = [
     targetHandle: 'top',
     animated: true
   }
-].map<Edge>((edge) => ({ type: 'step', ...edge }))
+]
 </script>
 
 <style scoped lang="less">
