@@ -1,34 +1,34 @@
 <script setup lang="ts">
-import type { Ref, ComputedRef } from 'vue'
+import type { ComputedRef } from 'vue'
 import type { Node as FlowNode, Edge } from '@vue-flow/core'
 import type { WorkflowNodeData } from './MainWorkflowNode.vue'
 
 import { ref } from 'vue'
+import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 
-import { VueFlow, Position, useVueFlow, MarkerType } from '@vue-flow/core'
+import { VueFlow, Position, useVueFlow, MarkerType, Panel, PanelPosition } from '@vue-flow/core'
+
 import MainWorkflowNode from './MainWorkflowNode.vue'
-import { computed } from 'vue'
+import { defaultHandles } from './MultipleHandleNode.vue'
 
 const router = useRouter()
 
-const { onPaneReady, getSelectedNodes, addSelectedNodes, findNode } = useVueFlow({
+const { onPaneReady } = useVueFlow({
   defaultViewport: { zoom: 0.55 },
-  maxZoom: 4,
+  maxZoom: 2,
   minZoom: 0.1
   // nodesDraggable: false
 })
 
 onPaneReady((instance) => instance.fitView())
 
-const X_OFFSET = 0
-
 const TRUNK_X_POS = 300
 
 interface Node extends FlowNode<WorkflowNodeData> {}
 
-const nodeDefinitions: Node[] = [
-  {
+const commonNodes: { [key: string]: Node } = {
+  sampling: {
     id: 'sampling',
     type: 'custom',
     label: 'Sampling',
@@ -39,7 +39,7 @@ const nodeDefinitions: Node[] = [
       target: 'sampling'
     }
   },
-  {
+  biomat: {
     id: 'biomat',
     type: 'custom',
     label: 'Biological material',
@@ -49,6 +49,78 @@ const nodeDefinitions: Node[] = [
       target: 'biomat'
     }
   },
+  motu: {
+    id: 'motu',
+    label: 'Species hypotheses',
+    type: 'custom',
+    position: { x: 600, y: 800 },
+    data: {
+      handles: [{ type: 'target', id: 'handle', position: Position.Left }],
+      icon: 'fa-tags',
+      target: 'motu'
+    }
+  },
+  identification: {
+    id: 'identification',
+    label: 'Identification',
+    type: 'custom',
+    position: { x: 700, y: 400 },
+    targetPosition: Position.Left,
+    data: {
+      handles: [
+        { type: 'target', id: 'handle', position: Position.Left },
+        { type: 'target', id: 'handleTop', position: Position.Top },
+        { type: 'target', id: 'handleBot', position: Position.Bottom }
+      ],
+      icon: 'fa-fingerprint',
+      target: 'identification'
+    }
+  }
+}
+
+const externalNodes: Node[] = [
+  commonNodes.sampling,
+  {
+    ...commonNodes.biomat,
+    data: {
+      ...commonNodes.biomat.data,
+      target: 'biomat-external',
+      handles: defaultHandles(['top', 'bot'])
+    },
+    position: { x: 100, y: 300 }
+  },
+  {
+    id: 'sequence',
+    type: 'custom',
+    label: 'Sequence',
+    position: { x: 500, y: 300 },
+    data: {
+      icon: 'fa-dna',
+      target: 'sequencing',
+      handles: defaultHandles(['top', 'right', 'bot'])
+    }
+  },
+  {
+    ...commonNodes.identification,
+    position: { x: 200, y: 500 },
+    data: { ...commonNodes.identification.data, handles: defaultHandles(['top']) }
+  },
+  {
+    id: 'motu-external',
+    label: 'Species hypotheses',
+    type: 'custom',
+    position: { x: 600, y: 500 },
+    data: {
+      handles: [{ type: 'source', id: 'right', position: Position.Right }],
+      icon: 'fa-tags',
+      target: 'motu'
+    }
+  }
+]
+
+const nodeDefinitions: Node[] = [
+  commonNodes.sampling,
+  commonNodes.biomat,
   {
     id: 'specimen',
     label: 'Specimen',
@@ -69,36 +141,8 @@ const nodeDefinitions: Node[] = [
       target: 'sequencing'
     }
   },
-  {
-    id: 'identification',
-    label: 'Identification',
-    type: 'custom',
-    position: { x: 700, y: 400 },
-    targetPosition: Position.Left,
-    width: 300,
-    data: {
-      handles: [
-        { type: 'target', id: 'handle', position: Position.Left },
-        { type: 'target', id: 'handleTop', position: Position.Top },
-        { type: 'target', id: 'handleBot', position: Position.Bottom }
-      ],
-      icon: 'fa-fingerprint',
-      target: 'identification'
-    }
-  },
-  {
-    id: 'sp-hypotheses',
-    label: 'Species hypotheses',
-    type: 'custom',
-    width: 400,
-    position: { x: 600, y: 800 },
-    targetPosition: Position.Left,
-    data: {
-      handles: [{ type: 'target', id: 'handle', position: Position.Left }],
-      icon: 'fa-tags',
-      target: 'motu'
-    }
-  },
+  commonNodes.identification,
+  commonNodes.motu,
   {
     id: 'storage',
     label: 'Storage',
@@ -117,23 +161,69 @@ const nodeDefinitions: Node[] = [
   }
 ]
 
-const nodes: Ref<Node[]> = ref(
-  nodeDefinitions.map<Node>(({ position: { x, y }, data, ...rest }) => ({
-    position: { x: x + X_OFFSET, y },
+const view = ref(0)
+
+const nodes: ComputedRef<Node[]> = computed(() => {
+  return [nodeDefinitions, externalNodes][view.value].map<Node>(({ data, ...rest }) => ({
     width: 300,
     selected: router.currentRoute.value.name === data?.target,
     data,
     // height: 100,
     ...rest
   }))
-)
+})
 
-const edges: ComputedRef<Edge[]> = computed(() => [
+const commonEdges: Edge[] = [
   {
     id: 'sampling-biomat',
     source: 'sampling',
     target: 'biomat'
   },
+  {
+    id: 'id-biomat',
+    type: 'step',
+    source: 'biomat',
+    target: 'identification',
+    sourceHandle: 'right',
+    targetHandle: 'handleTop'
+  }
+]
+
+const externalEdges: Edge[] = [
+  {
+    id: 'sampling-biomat',
+    source: 'sampling',
+    target: 'biomat'
+  },
+  {
+    id: 'id-biomat',
+    type: 'step',
+    source: 'biomat',
+    target: 'identification',
+    sourceHandle: 'bot',
+    targetHandle: 'handleTop'
+  },
+  { id: 'sampling-seq', source: 'sampling', target: 'sequence', sourceHandle: 'bot' },
+  {
+    id: 'id-seq',
+    type: 'step',
+    source: 'sequence',
+    target: 'identification',
+    sourceHandle: 'bot',
+    targetHandle: 'handleTop'
+  },
+  {
+    id: 'seq-motu-external',
+    type: 'step',
+    source: 'sequence',
+    target: 'motu-external',
+    sourceHandle: 'right',
+    targetHandle: 'right'
+  }
+]
+
+const internalEdges: Edge[] = [
+  ...commonEdges,
   {
     id: 'biomat-specimen',
     source: 'biomat',
@@ -147,14 +237,7 @@ const edges: ComputedRef<Edge[]> = computed(() => [
     sourceHandle: 'bot',
     target: 'sequencing'
   },
-  {
-    id: 'id-biomat',
-    type: 'step',
-    source: 'biomat',
-    target: 'identification',
-    sourceHandle: 'right',
-    targetHandle: 'handleTop'
-  },
+
   {
     id: 'id-specimen',
     type: 'step',
@@ -174,8 +257,9 @@ const edges: ComputedRef<Edge[]> = computed(() => [
     id: 'seq-motu',
     type: 'step',
     source: 'sequencing',
-    target: 'sp-hypotheses',
-    sourceHandle: 'bot'
+    target: 'motu',
+    sourceHandle: 'bot',
+    targetHandle: 'top'
   },
   {
     id: 'dna-storage',
@@ -194,7 +278,11 @@ const edges: ComputedRef<Edge[]> = computed(() => [
     sourceHandle: 'left',
     targetHandle: 'handleTop'
   }
-])
+]
+
+const edges: ComputedRef<Edge[]> = computed(() => {
+  return [internalEdges, externalEdges][view.value]
+})
 
 const activeNodeName = computed(() => router.currentRoute.value.name)
 
@@ -203,6 +291,8 @@ const defaultEdgeOptions = {
   markerEnd: { type: MarkerType.ArrowClosed, color: 'dodgerblue' },
   animated: true
 }
+
+const buttons = [{ text: 'Internal data' }, { text: 'External data' }]
 </script>
 
 <template>
@@ -213,6 +303,15 @@ const defaultEdgeOptions = {
     fit-view-on-init
     :default-edge-options="defaultEdgeOptions"
   >
+    <v-item-group v-model="view">
+      <Panel :position="PanelPosition.TopLeft" class="d-flex flex-column">
+        <v-item v-for="{ text } in buttons" :key="text" v-slot="{ isSelected, toggle }">
+          <v-btn class="mb-3" :class="isSelected ? 'bg-info' : ''" @click="toggle">
+            {{ text }}
+          </v-btn>
+        </v-item>
+      </Panel>
+    </v-item-group>
     <template #node-custom="{ data, label, id }">
       <MainWorkflowNode v-bind="{ label, active: id === activeNodeName, ...data }" />
     </template>
@@ -225,10 +324,6 @@ const defaultEdgeOptions = {
 
 /* this contains the default theme, these are optional styles */
 @import '@vue-flow/core/dist/theme-default.css';
-
-/* :root {
-  --vf-connection-path: green;
-} */
 
 .vue-flow {
   background: white;

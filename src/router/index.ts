@@ -44,6 +44,11 @@ const router = createRouter({
       path: '/motu',
       name: 'motu',
       component: () => import ('../views/MotuView.vue')
+    },
+    {
+      path: "/biomat-external",
+      name: "biomat-external",
+      component: () => import ('../views/external/BioMatView.vue')
     }
   ]
 })

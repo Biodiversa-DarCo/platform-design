@@ -47,8 +47,8 @@ import { RouterLink } from 'vue-router'
         <MainWorkflow
           :zoom-on-scroll="false"
           :pan-on-drag="false"
-          :nodes-draggable="false"
           :prevent-scrolling="false"
+          :nodes-draggable="false"
         ></MainWorkflow>
       </v-col>
     </v-row>

@@ -1,17 +1,7 @@
 <template>
   <v-container>
-    <h1 class="text-h4">Specimen</h1>
-    <v-divider class="my-6"></v-divider>
-    <div class="text-body-1">
-      <p class="mb-3">
-        A biological material bundle contains several specimens that are all identified to a single
-        taxonomic group (at least at this point, see the Identification workflow).
-      </p>
-      <p class="mb-">
-        Functional traits can be attached to a biological material bundle to describe specimens it
-        contains.
-      </p>
-    </div>
+    <WorkflowHeader title="Specimen" discussion="specimen"></WorkflowHeader>
+    <div class="text-body-1"></div>
     <DetailWorkflow :nodes="nodes" :edges="edges" v-bind="$attrs" />
   </v-container>
 </template>
@@ -24,6 +14,7 @@ import { ref } from 'vue'
 import { useVueFlow } from '@vue-flow/core'
 import DetailWorkflow from '@/components/DetailWorkflow.vue'
 import { defaultHandles } from '@/components/MultipleHandleNode.vue'
+import WorkflowHeader from '@/components/WorkflowHeader.vue'
 
 useVueFlow({ id: 'biomat' })
 
@@ -49,12 +40,11 @@ const nodeDefinitions: Node[] = [
     data: {
       icon: 'fa-box',
       items: [
-        { title: 'Code' },
-        { title: 'Date' },
-        { title: 'Sequencing advice' },
-        { title: 'Status' },
-        { title: 'Published in' },
-        { title: 'Composition' }
+        { title: 'Molecular Code', props: { appendIcon: 'fas fa-hashtag' } },
+        { title: 'Morphological Code', props: { appendIcon: 'fas fa-hashtag' } },
+        { title: 'Tube Code' },
+        { title: 'Molecular number' },
+        { title: 'Type' }
       ],
       handles: defaultHandles()
         .map((handle) =>
@@ -177,7 +167,8 @@ const edges: Edge[] = [
     source: 'slide',
     target: 'storage',
     sourceHandle: 'bot',
-    targetHandle: 'top'
+    targetHandle: 'top',
+    animated: true
   },
   {
     id: 'specimen-sequencing',

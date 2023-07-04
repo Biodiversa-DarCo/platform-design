@@ -1,18 +1,6 @@
 <template>
   <v-container>
-    <h1 class="text-h4">Sequencing</h1>
-    <v-divider class="my-3"></v-divider>
-    <p class="mb-3">
-      Sample collection is the starting point of the research workflow. A sampling operation is done
-      on a site, whose coordinates and location are kept track of, as well as some descriptive
-      variables such as the habitat type (e.g. subterranean freshwater, river). It targets one or
-      several taxonomic groups.
-    </p>
-    <p class="mb-3">
-      A sampling operation provides one or several bundles of
-      <a href="" @click.prevent="$emit('goToWorkflow', 'biomat')">biological material</a>.
-    </p>
-
+    <WorkflowHeader title="Sequencing" discussion="sequencing"></WorkflowHeader>
     <DetailWorkflow :nodes="nodes" :edges="edges" v-bind="$attrs" />
   </v-container>
 </template>
@@ -22,9 +10,9 @@ import type { Edge } from '@vue-flow/core'
 import type { Node } from '@/components/DetailWorkflow.vue'
 
 import { ref } from 'vue'
-import { Position } from '@vue-flow/core'
 import { defaultHandles } from '@/components/MultipleHandleNode.vue'
 import DetailWorkflow from '@/components/DetailWorkflow.vue'
+import WorkflowHeader from '@/components/WorkflowHeader.vue'
 
 const nodeDefinitions: Node[] = [
   {
@@ -34,7 +22,8 @@ const nodeDefinitions: Node[] = [
     position: { x: 500, y: 50 },
     data: {
       handles: defaultHandles(['bot']),
-      target: 'specimen'
+      target: 'specimen',
+      icon: 'fa-locust'
     }
   },
   {
@@ -60,7 +49,7 @@ const nodeDefinitions: Node[] = [
     label: 'PCR',
     position: { x: 300, y: 200 },
     data: {
-      icon: 'fa-arrow-up',
+      icon: 'fa-refresh',
       items: [
         { title: 'Number' },
         { title: 'Date' },
@@ -117,7 +106,8 @@ const nodeDefinitions: Node[] = [
     position: { x: 1300, y: 300 },
     data: {
       handles: defaultHandles(['left']),
-      target: 'motu'
+      target: 'motu',
+      icon: 'fa-tags'
     }
   }
 ]

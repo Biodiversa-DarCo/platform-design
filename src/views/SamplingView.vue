@@ -1,7 +1,6 @@
 <template>
   <v-container>
-    <h1 class="text-h4">Sampling</h1>
-    <v-divider class="my-3"></v-divider>
+    <WorkflowHeader title="Sampling" discussion="sampling"></WorkflowHeader>
     <p class="mb-3">
       Sample collection is the starting point of the research workflow. A sampling operation is done
       on a site, whose coordinates and location are kept track of, as well as some descriptive
@@ -10,7 +9,7 @@
     </p>
     <p class="mb-3">
       A sampling operation provides one or several bundles of
-      <a href="" @click.prevent="$emit('goToWorkflow', 'biomat')">biological material</a>.
+      <RouterLink :to="{ name: 'biomat' }">biological material</RouterLink>.
     </p>
 
     <DetailWorkflow :nodes="nodes" :edges="edges" v-bind="$attrs" />
@@ -25,6 +24,8 @@ import { ref } from 'vue'
 import { Position } from '@vue-flow/core'
 import { defaultHandles } from '@/components/MultipleHandleNode.vue'
 import DetailWorkflow from '@/components/DetailWorkflow.vue'
+import { RouterLink } from 'vue-router'
+import WorkflowHeader from '@/components/WorkflowHeader.vue'
 
 const nodeDefinitions: Node[] = [
   {

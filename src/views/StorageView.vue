@@ -1,7 +1,6 @@
 <template>
   <v-container>
-    <h1 class="text-h4">Storage</h1>
-    <v-divider class="my-6"></v-divider>
+    <WorkflowHeader title="Storage" discussion="storage"></WorkflowHeader>
     <div class="text-body-1"></div>
     <DetailWorkflow :nodes="nodes" :edges="edges" v-bind="$attrs" />
   </v-container>
@@ -9,12 +8,13 @@
 
 <script setup lang="ts">
 import type { WorkflowNodeData } from '@/components/DetailWorkflowNode.vue'
-import { Position, type Edge, type Node as FlowNode } from '@vue-flow/core'
+import { type Edge, type Node as FlowNode } from '@vue-flow/core'
 
 import { ref } from 'vue'
 import { useVueFlow } from '@vue-flow/core'
 import DetailWorkflow from '@/components/DetailWorkflow.vue'
 import { defaultHandles } from '@/components/MultipleHandleNode.vue'
+import WorkflowHeader from '@/components/WorkflowHeader.vue'
 
 useVueFlow({ id: 'biomat' })
 
@@ -109,8 +109,14 @@ const edges: Edge[] = [
     source: 'collection',
     target: 'biomat-store',
     sourceHandle: 'right',
-    targetHandle: 'left',
-    label: 'contains'
+    targetHandle: 'left'
+  },
+  {
+    id: 'collection-dna',
+    source: 'collection',
+    target: 'dna-store',
+    sourceHandle: 'right',
+    targetHandle: 'left'
   },
   {
     id: 'collection-slides',
@@ -121,20 +127,13 @@ const edges: Edge[] = [
     label: 'contains'
   },
   {
-    id: 'collection-dna',
-    source: 'collection',
-    target: 'dna-store',
-    sourceHandle: 'right',
-    targetHandle: 'left',
-    label: 'contains'
-  },
-  {
     id: 'sequencing-dna',
     source: 'dna',
     target: 'dna-store',
     sourceHandle: 'left',
     targetHandle: 'right',
-    animated: true
+    animated: true,
+    type: 'bezier'
   },
   {
     id: 'specimen-slides',
@@ -142,7 +141,8 @@ const edges: Edge[] = [
     target: 'slide-store',
     sourceHandle: 'left',
     targetHandle: 'right',
-    animated: true
+    animated: true,
+    type: 'bezier'
   },
   {
     id: 'biomat-biomat',
@@ -150,7 +150,8 @@ const edges: Edge[] = [
     target: 'biomat-store',
     sourceHandle: 'left',
     targetHandle: 'right',
-    animated: true
+    animated: true,
+    type: 'bezier'
   }
 ]
 </script>

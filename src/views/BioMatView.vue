@@ -1,7 +1,6 @@
 <template>
   <v-container>
-    <h1 class="text-h4">Biological material</h1>
-    <v-divider class="my-3"></v-divider>
+    <WorkflowHeader title="Biological material" discussion="biological-material"></WorkflowHeader>
     <div class="text-body-1">
       <p class="mb-3">
         A biological material bundle contains several specimens that are all identified to a single
@@ -13,11 +12,26 @@
       </p>
     </div>
     <DetailWorkflow :nodes="nodes" :edges="edges" v-bind="$attrs" />
+    <v-card>
+      <v-card-item>
+        <v-card-title>Things to think about</v-card-title>
+      </v-card-item>
+      <v-card-text class="text-body-1">
+        <p>
+          The definition of biological material in this model is a bundle of several specimens: it
+          fits the sampling of small organisms such as crustaceans. Should we adapt it to represent
+          other kind of sampling, such as body parts or environmental DNA ?
+        </p>
+        <v-divider />
+      </v-card-text>
+    </v-card>
   </v-container>
 </template>
 
 <script setup lang="ts">
 import type { WorkflowNodeData } from '@/components/DetailWorkflowNode.vue'
+
+import WorkflowHeader from '@/components/WorkflowHeader.vue'
 import { Position, type Edge, type Node as FlowNode } from '@vue-flow/core'
 
 import { ref } from 'vue'
@@ -49,11 +63,11 @@ const nodeDefinitions: Node[] = [
     data: {
       icon: 'fa-box',
       items: [
-        { title: 'Code' },
+        { title: 'Code', props: { appendIcon: 'fas fa-hashtag' } },
         { title: 'Date' },
         { title: 'Sequencing advice' },
         { title: 'Status' },
-        { title: 'Published in' },
+        { title: 'Published in', props: { appendIcon: 'fas fa-newspaper' } },
         { title: 'Composition' }
       ],
       handles: defaultHandles()

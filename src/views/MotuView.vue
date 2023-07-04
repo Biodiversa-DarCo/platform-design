@@ -1,7 +1,9 @@
 <template>
   <v-container>
-    <h1 class="text-h4">Species Hypotheses</h1>
-    <v-divider class="my-3"></v-divider>
+    <WorkflowHeader
+      title="Species Hypotheses (MOTU)"
+      discussion="species-hypotheses"
+    ></WorkflowHeader>
     <p class="mb-3">
       Sample collection is the starting point of the research workflow. A sampling operation is done
       on a site, whose coordinates and location are kept track of, as well as some descriptive
@@ -22,9 +24,9 @@ import type { Edge } from '@vue-flow/core'
 import type { Node } from '@/components/DetailWorkflow.vue'
 
 import { ref } from 'vue'
-import { Position } from '@vue-flow/core'
 import { defaultHandles } from '@/components/MultipleHandleNode.vue'
 import DetailWorkflow from '@/components/DetailWorkflow.vue'
+import WorkflowHeader from '@/components/WorkflowHeader.vue'
 
 const nodeDefinitions: Node[] = [
   {
