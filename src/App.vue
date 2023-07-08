@@ -15,6 +15,12 @@ const { drawer, toggleDrawer } = useDrawerStore()
           <v-toolbar-title @click="navigate">DarCo Workflow</v-toolbar-title>
         </button>
       </RouterLink>
+      <v-spacer></v-spacer>
+      <v-btn
+        icon="fab fa-github"
+        size="large"
+        href="https://github.com/Biodiversa-DarCo/platform-design"
+      ></v-btn>
     </v-app-bar>
     <v-navigation-drawer width="800" v-model="drawer" temporary>
       <MainWorkflow
