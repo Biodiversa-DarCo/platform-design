@@ -12,19 +12,7 @@
       </p>
     </div>
     <DetailWorkflow :nodes="nodes" :edges="edges" v-bind="$attrs" />
-    <v-card>
-      <v-card-item>
-        <v-card-title>Things to think about</v-card-title>
-      </v-card-item>
-      <v-card-text class="text-body-1">
-        <p>
-          The definition of biological material in this model is a bundle of several specimens: it
-          fits the sampling of small organisms such as crustaceans. Should we adapt it to represent
-          other kind of sampling, such as body parts or environmental DNA ?
-        </p>
-        <v-divider />
-      </v-card-text>
-    </v-card>
+    <GiscusWrapper term="Biological material"></GiscusWrapper>
   </v-container>
 </template>
 
@@ -39,6 +27,8 @@ import { useVueFlow } from '@vue-flow/core'
 import DetailWorkflow from '@/components/DetailWorkflow.vue'
 import { defaultHandles } from '@/components/MultipleHandleNode.vue'
 
+import GiscusWrapper from '@/components/GiscusWrapper.vue'
+
 useVueFlow({ id: 'biomat' })
 
 interface Node extends FlowNode<WorkflowNodeData> {}
@@ -49,6 +39,7 @@ const nodeDefinitions: Node[] = [
     type: 'custom',
     label: 'Sampling',
     position: { x: 300, y: 0 },
+    width: 300,
     data: {
       icon: 'fa-bucket',
       target: 'sampling',
@@ -60,19 +51,47 @@ const nodeDefinitions: Node[] = [
     type: 'custom',
     label: 'Biological material',
     position: { x: 300, y: 150 },
+    width: 300,
     data: {
       icon: 'fa-box',
       items: [
-        { title: 'Code', props: { appendIcon: 'fas fa-hashtag' } },
-        { title: 'Date' },
-        { title: 'Sequencing advice' },
-        { title: 'Status' },
-        { title: 'Published in', props: { appendIcon: 'fas fa-newspaper' } },
-        { title: 'Composition' }
+        {
+          title: 'Code',
+          appendIcon: 'fas fa-hashtag',
+          content: {
+            text: 'A human readable identifier for the biological material, generated as <code>{taxname}|{sampling_code}</code>'
+          }
+        },
+        {
+          title: 'Date',
+          content: {
+            text: 'The date of constitution of the biological material.'
+          }
+        },
+        {
+          title: 'Sequencing advice',
+          content: {
+            text: [
+              'Instructions on which parts of the biological material should be sent forward to sequencing.',
+              'This is the current implementation in Gotit, but should be replaced with an explicit modelling of this part of the workflow in the database structure.'
+            ]
+          }
+        },
+        {
+          title: 'Status',
+          content: {
+            text: 'Indicated whether this biological material bundle has been processed.'
+          }
+        },
+        {
+          title: 'Published in',
+          appendIcon: 'fas fa-newspaper',
+          content: { text: 'A reference to a Source where this biological material was published' }
+        }
       ],
-      handles: defaultHandles()
+      handles: defaultHandles(['top', 'left', 'right'])
         .map((handle) =>
-          handle.position === Position.Right
+          [Position.Right, Position.Left].includes(handle.position)
             ? { ...handle, style: { bottom: '20%', top: 'auto' } }
             : handle
         )
@@ -82,6 +101,12 @@ const nodeDefinitions: Node[] = [
             type: 'source',
             position: Position.Right,
             style: { top: '20%', bottom: 'auto' }
+          },
+          {
+            id: 'storageHandle',
+            type: 'source',
+            position: Position.Left,
+            style: { top: '20%', bottom: 'auto' }
           }
         ])
     }
@@ -90,7 +115,7 @@ const nodeDefinitions: Node[] = [
     id: 'specimen',
     type: 'custom',
     label: 'Specimens',
-    position: { x: 300, y: 600 },
+    position: { x: 340, y: 600 },
     data: {
       icon: 'fa-locust',
       handles: defaultHandles(['top']),
@@ -103,7 +128,7 @@ const nodeDefinitions: Node[] = [
     label: 'Identification',
     position: { x: 700, y: 400 },
     data: {
-      icon: 'fa-fingerprint',
+      icon: 'fa-sitemap',
       handles: defaultHandles(['left']),
       target: 'identification'
     }
@@ -112,11 +137,36 @@ const nodeDefinitions: Node[] = [
     id: 'storage',
     type: 'custom',
     label: 'Storage',
-    position: { x: 0, y: 300 },
+    position: { x: 0, y: 150 },
     data: {
       icon: 'fa-boxes',
       handles: defaultHandles(['right']),
       target: 'storage'
+    }
+  },
+  {
+    id: 'tube',
+    type: 'custom',
+    label: 'Tube',
+    position: { x: 0, y: 450 },
+    data: {
+      icon: 'fa-vial',
+      handles: defaultHandles(['top', 'right']),
+      items: [
+        {
+          title: 'Label',
+          content: { text: 'A label for the tube that matches its physical label' }
+        },
+        {
+          title: 'Content type',
+          content: {
+            text: [
+              'A description of the tube content as a tag, picked from a list of registered values.',
+              'e.g. males/females, fragments, juveniles, mixed...'
+            ]
+          }
+        }
+      ]
     }
   },
   {
@@ -127,7 +177,18 @@ const nodeDefinitions: Node[] = [
     data: {
       icon: 'fa-list',
       handles: defaultHandles(['left']),
-      items: [{ title: 'Kind' }, { title: 'Value' }]
+      items: [
+        {
+          title: 'Kind',
+          content: {
+            text: [
+              'A trait name, e.g. pigmentation.',
+              'Picked from a configurable list of registered traits.'
+            ]
+          }
+        },
+        { title: 'Value', content: { text: 'A trait value' } }
+      ]
     }
   }
 ]
@@ -145,26 +206,18 @@ const edges: Edge[] = [
     animated: true
   },
   {
-    id: 'biomat-specimen',
-    source: 'biomat',
-    target: 'specimen',
-    sourceHandle: 'bot',
-    targetHandle: 'top',
-    label: 'contains',
-    animated: true
-  },
-  {
     id: 'biomat-id',
     source: 'biomat',
     target: 'identification',
     sourceHandle: 'right',
-    targetHandle: 'left'
+    targetHandle: 'left',
+    animated: true
   },
   {
     id: 'biomat-storage',
     source: 'biomat',
     target: 'storage',
-    sourceHandle: 'left',
+    sourceHandle: 'storageHandle',
     targetHandle: 'right',
     animated: true
   },
@@ -175,6 +228,22 @@ const edges: Edge[] = [
     sourceHandle: 'traits',
     targetHandle: 'left',
     label: 'has some'
+  },
+  {
+    id: 'biomat-tubes',
+    source: 'biomat',
+    target: 'tube',
+    sourceHandle: 'left',
+    targetHandle: 'left',
+    label: 'contains some'
+  },
+  {
+    id: 'tubes-specimen',
+    source: 'tube',
+    target: 'specimen',
+    sourceHandle: 'right',
+    targetHandle: 'top',
+    label: 'contains some'
   }
 ]
 </script>

@@ -72,7 +72,7 @@ const commonNodes: { [key: string]: Node } = {
         { type: 'target', id: 'handleTop', position: Position.Top },
         { type: 'target', id: 'handleBot', position: Position.Bottom }
       ],
-      icon: 'fa-fingerprint',
+      icon: 'fa-sitemap',
       target: 'identification'
     }
   }
@@ -82,31 +82,38 @@ const externalNodes: Node[] = [
   commonNodes.sampling,
   {
     ...commonNodes.biomat,
+    id: 'external-biomat',
+    label: 'External Bio. Mat.',
     data: {
       ...commonNodes.biomat.data,
-      target: 'biomat-external',
+      target: 'external-biomat',
       handles: defaultHandles(['top', 'bot'])
     },
     position: { x: 100, y: 300 }
   },
   {
-    id: 'sequence',
+    id: 'external-sequence',
     type: 'custom',
-    label: 'Sequence',
+    label: 'External sequence',
     position: { x: 500, y: 300 },
     data: {
       icon: 'fa-dna',
-      target: 'sequencing',
+      target: 'external-sequence',
       handles: defaultHandles(['top', 'right', 'bot'])
     }
   },
   {
     ...commonNodes.identification,
+    id: 'external-identification',
     position: { x: 200, y: 500 },
-    data: { ...commonNodes.identification.data, handles: defaultHandles(['top']) }
+    data: {
+      ...commonNodes.identification.data,
+      target: 'external-identification',
+      handles: defaultHandles(['top'])
+    }
   },
   {
-    id: 'motu-external',
+    id: 'external-motu',
     label: 'Species hypotheses',
     type: 'custom',
     position: { x: 600, y: 500 },
@@ -193,30 +200,35 @@ const externalEdges: Edge[] = [
   {
     id: 'sampling-biomat',
     source: 'sampling',
-    target: 'biomat'
+    target: 'external-biomat'
   },
   {
     id: 'id-biomat',
     type: 'step',
-    source: 'biomat',
-    target: 'identification',
+    source: 'external-biomat',
+    target: 'external-identification',
     sourceHandle: 'bot',
     targetHandle: 'handleTop'
   },
-  { id: 'sampling-seq', source: 'sampling', target: 'sequence', sourceHandle: 'bot' },
+  {
+    id: 'sampling-seq',
+    source: 'sampling',
+    target: 'external-sequence',
+    sourceHandle: 'bot'
+  },
   {
     id: 'id-seq',
     type: 'step',
-    source: 'sequence',
-    target: 'identification',
+    source: 'external-sequence',
+    target: 'external-identification',
     sourceHandle: 'bot',
     targetHandle: 'handleTop'
   },
   {
     id: 'seq-motu-external',
     type: 'step',
-    source: 'sequence',
-    target: 'motu-external',
+    source: 'external-sequence',
+    target: 'external-motu',
     sourceHandle: 'right',
     targetHandle: 'right'
   }
@@ -302,6 +314,7 @@ const buttons = [{ text: 'Internal data' }, { text: 'External data' }]
     v-bind="$attrs"
     fit-view-on-init
     :default-edge-options="defaultEdgeOptions"
+    class="mx-auto"
   >
     <v-item-group v-model="view">
       <Panel :position="PanelPosition.TopLeft" class="d-flex flex-column">

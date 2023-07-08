@@ -46,9 +46,19 @@ const router = createRouter({
       component: () => import ('../views/MotuView.vue')
     },
     {
-      path: "/biomat-external",
-      name: "biomat-external",
+      path: "/external/biomat",
+      name: "external-biomat",
       component: () => import ('../views/external/BioMatView.vue')
+    },
+    {
+      path: "/external/sequence",
+      name: "external-sequence",
+      component: () => import ('../views/external/SequenceView.vue')
+    },
+    {
+      path: "/external/identification",
+      name: "external-identification",
+      component: () => import ('../views/external/IdentificationView.vue')
     }
   ]
 })

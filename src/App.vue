@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import { ref } from 'vue'
 import MainWorkflow from './components/MainWorkflow.vue'
 
-let drawer = ref(false)
+import { useDrawerStore } from './stores/drawer'
+const { drawer, toggleDrawer } = useDrawerStore()
 </script>
 
 <template>
   <v-app>
     <v-app-bar color="indigo">
-      <v-app-bar-nav-icon variant="text" @click="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon variant="text" @click="toggleDrawer"></v-app-bar-nav-icon>
       <RouterLink to="/" custom v-slot="{ navigate }">
         <button @click="navigate">
           <v-toolbar-title @click="navigate">DarCo Workflow</v-toolbar-title>

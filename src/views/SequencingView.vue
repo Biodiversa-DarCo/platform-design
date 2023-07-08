@@ -2,6 +2,7 @@
   <v-container>
     <WorkflowHeader title="Sequencing" discussion="sequencing"></WorkflowHeader>
     <DetailWorkflow :nodes="nodes" :edges="edges" v-bind="$attrs" />
+    <GiscusWrapper term="Sequencing"></GiscusWrapper>
   </v-container>
 </template>
 
@@ -13,15 +14,16 @@ import { ref } from 'vue'
 import { defaultHandles } from '@/components/MultipleHandleNode.vue'
 import DetailWorkflow from '@/components/DetailWorkflow.vue'
 import WorkflowHeader from '@/components/WorkflowHeader.vue'
+import GiscusWrapper from '@/components/GiscusWrapper.vue'
 
 const nodeDefinitions: Node[] = [
   {
     id: 'specimen',
     type: 'custom',
     label: 'Specimen',
-    position: { x: 500, y: 50 },
+    position: { x: 50, y: 50 },
     data: {
-      handles: defaultHandles(['bot']),
+      handles: defaultHandles(['left']),
       target: 'specimen',
       icon: 'fa-locust'
     }
@@ -30,16 +32,26 @@ const nodeDefinitions: Node[] = [
     id: 'DNA',
     type: 'custom',
     label: 'DNA',
-    position: { x: 0, y: 200 },
+    position: { x: 0, y: 230 },
     data: {
-      handles: defaultHandles(['top', 'right']),
+      handles: defaultHandles(['top', 'left']),
       icon: 'fa-dna',
       items: [
-        { title: 'Concentration' },
+        {
+          title: 'Code',
+          appendIcon: 'fas fa-hashtag',
+          content: { text: 'A unique identifier for the DNA sample' }
+        },
+        { title: 'Concentration', content: { text: 'DNA sample concentration' } },
         { title: 'Quality' },
         { title: 'Extraction date' },
-        { title: 'Extraction method' },
-        { title: 'Extracted by' }
+        {
+          title: 'Extraction method',
+          content: {
+            text: ['Picked from a configurable list.', 'e.g. chelex, destructive, non destructive']
+          }
+        },
+        { title: 'Extracted by', appendIcon: 'fas fa-users' }
       ]
     }
   },
@@ -53,59 +65,122 @@ const nodeDefinitions: Node[] = [
       items: [
         { title: 'Number' },
         { title: 'Date' },
-        { title: 'Details' },
-        { title: 'Target gene' },
-        { title: 'Quality' },
+        {
+          title: 'Details',
+          content: {
+            text: 'Additional infos on the PCR, like the number of cycles or the temperature'
+          }
+        },
+        {
+          title: 'Target gene',
+          content: {
+            text: ['Picked from a configurable list of genes.', 'e.g. 16S, COI']
+          }
+        },
+        { title: 'Quality', content: { text: 'PCR quality, e.g. good / failure' } },
         { title: 'Specificity' },
-        { title: 'Forward primer' },
-        { title: 'Reverse primer' },
-        { title: 'Performed by' }
+        {
+          title: 'Primers',
+          content: {
+            text: ['Forward and reverse PCR primers.', 'Picked from a list of registered primers.']
+          }
+        },
+        { title: 'Performed by', appendIcon: 'fas fa-users' }
       ],
-      handles: defaultHandles(['left', 'right'])
+      handles: defaultHandles(['top', 'bot'])
     }
   },
   {
     id: 'chromato',
     type: 'custom',
     label: 'Chromatogramme',
-    position: { x: 600, y: 200 },
+    position: { x: 550, y: 250 },
     data: {
       icon: 'fa-chart-column',
       items: [
         { title: 'Number' },
-        { title: 'Sequencing institute' },
+        {
+          title: 'Code',
+          appendIcon: 'fas fa-hashtag',
+          content: {
+            text: 'An identifier for the chromatogram, expressed as <code>{Number}|{Primer}</code>'
+          }
+        },
+        {
+          title: 'Sequencing institute',
+          content: { text: 'The institution responsible for the sequencing' }
+        },
         { title: 'Quality' },
-        { title: 'Primer' }
+        {
+          title: 'Primer',
+          content: { text: 'Chromatogram primer picked from a list of registered primers.' }
+        }
       ],
-      handles: defaultHandles(['left', 'right'])
+      handles: defaultHandles(['top', 'bot'])
     }
   },
   {
     id: 'sequence',
     type: 'custom',
     label: 'Sequence',
-    position: { x: 1000, y: 200 },
+    position: { x: 850, y: 200 },
     data: {
       icon: 'fa-chevron-right',
       items: [
-        { title: 'Date' },
-        { title: 'Accession number' },
-        { title: 'Code' },
-        { title: 'Alignment code' },
-        { title: 'Assembled by' },
+        {
+          title: 'Code',
+          appendIcon: 'fas fa-hashtag',
+          content: {
+            text: [
+              'An identifier for the sequence, defined as <code>{specimen_code}_{PCR_code}</code>'
+            ]
+          }
+        },
+        {
+          title: 'Alignment code',
+          appendIcon: 'fas fa-hashtag',
+          content: {
+            text: [
+              'An identifier to be used in alignments, similar to the main sequence code but contains a shortened taxon name.'
+            ]
+          }
+        },
+        { title: 'Date', content: { text: 'Assembly date' } },
+        {
+          title: 'Accession number',
+          content: { text: 'In case the sequence was published on the NCBI' }
+        },
         { title: 'Status' },
-        { title: 'Published in' }
+        { title: 'Assembled by', appendIcon: 'fas fa-users' },
+        {
+          title: 'Published in',
+          appendIcon: 'fas fa-newspaper',
+          content: { text: 'Optional reference to a Source where the sequence was published.' }
+        }
       ],
-      handles: defaultHandles(['left', 'right'])
+      handles: defaultHandles(['top', 'bot'])
+    }
+  },
+  {
+    id: 'identification',
+    type: 'custom',
+    label: 'Identification',
+    position: { x: 650, y: 700 },
+    width: 300,
+    data: {
+      handles: defaultHandles(['top']),
+      target: 'identification',
+      icon: 'fa-sitemap'
     }
   },
   {
     id: 'motu',
     type: 'custom',
     label: 'Species Hypotheses',
-    position: { x: 1300, y: 300 },
+    position: { x: 1050, y: 700 },
+    width: 300,
     data: {
-      handles: defaultHandles(['left']),
+      handles: defaultHandles(['top']),
       target: 'motu',
       icon: 'fa-tags'
     }
@@ -119,8 +194,8 @@ const edges: Edge[] = [
     id: 'specimen-dna',
     source: 'specimen',
     target: 'DNA',
-    sourceHandle: 'bot',
-    targetHandle: 'top',
+    sourceHandle: 'left',
+    targetHandle: 'left',
     animated: true,
     label: 'extraction'
   },
@@ -128,8 +203,8 @@ const edges: Edge[] = [
     id: 'dna-pcr',
     source: 'DNA',
     target: 'PCR',
-    sourceHandle: 'right',
-    targetHandle: 'left',
+    sourceHandle: 'top',
+    targetHandle: 'top',
     animated: true,
     label: 'amplification'
   },
@@ -137,8 +212,8 @@ const edges: Edge[] = [
     id: 'pcr-chromato',
     source: 'PCR',
     target: 'chromato',
-    sourceHandle: 'right',
-    targetHandle: 'left',
+    sourceHandle: 'bot',
+    targetHandle: 'bot',
     animated: true,
     label: 'sequencing'
   },
@@ -146,10 +221,18 @@ const edges: Edge[] = [
     id: 'chromato-seq',
     source: 'chromato',
     target: 'sequence',
-    sourceHandle: 'right',
-    targetHandle: 'left',
+    sourceHandle: 'top',
+    targetHandle: 'top',
     animated: true,
     label: 'processed to'
+  },
+  {
+    id: 'seq-id',
+    source: 'sequence',
+    target: 'identification',
+    sourceHandle: 'bot',
+    targetHandle: 'top',
+    animated: true
   },
   {
     id: 'seq-motu',
@@ -157,8 +240,7 @@ const edges: Edge[] = [
     target: 'motu',
     sourceHandle: 'right',
     targetHandle: 'left',
-    animated: true,
-    label: 'assigned to '
+    animated: true
   }
 ]
 </script>

@@ -20,6 +20,7 @@
     </p>
 
     <DetailWorkflow :nodes="nodes" :edges="edges" v-bind="$attrs" />
+    <GiscusWrapper term="Identification"></GiscusWrapper>
   </v-container>
 </template>
 
@@ -27,17 +28,18 @@
 import type { Edge } from '@vue-flow/core'
 import type { Node } from '@/components/DetailWorkflow.vue'
 
-import { ref } from 'vue'
 import { defaultHandles } from '@/components/MultipleHandleNode.vue'
 import DetailWorkflow from '@/components/DetailWorkflow.vue'
 import WorkflowHeader from '@/components/WorkflowHeader.vue'
+import GiscusWrapper from '@/components/GiscusWrapper.vue'
 
-const nodeDefinitions: Node[] = [
+const nodes: Node[] = [
   {
     id: 'biomat',
     type: 'custom',
     label: 'Biological material',
     position: { x: 0, y: 50 },
+    width: 300,
     data: {
       handles: defaultHandles(['bot', 'right']),
       target: 'biomat',
@@ -49,6 +51,7 @@ const nodeDefinitions: Node[] = [
     type: 'custom',
     label: 'Specimen',
     position: { x: 0, y: 300 },
+    width: 300,
     data: {
       handles: defaultHandles(['top', 'right', 'bot']),
       icon: 'fa-locust',
@@ -59,7 +62,8 @@ const nodeDefinitions: Node[] = [
     id: 'sequence',
     type: 'custom',
     label: 'Sequence',
-    position: { x: 0, y: 500 },
+    position: { x: 0, y: 550 },
+    width: 300,
     data: {
       target: 'sequencing',
       icon: 'fa-dna',
@@ -72,16 +76,25 @@ const nodeDefinitions: Node[] = [
     label: 'Taxon',
     position: { x: 900, y: 200 },
     data: {
-      icon: 'fa-tag',
-      items: [{ title: 'Name' }, { title: 'Level' }],
-      handles: defaultHandles()
+      icon: 'fa-sitemap',
+      items: [
+        { title: 'Name', content: { text: 'Taxon name' } },
+        {
+          title: 'Code',
+          appendIcon: 'fas fa-hashtag',
+          content: { text: 'A unique short name to be used when refering to the taxon' }
+        },
+        { title: 'Rank', content: { text: 'Taxonomic rank, e.g. order, family, genus... ' } }
+      ],
+      handles: defaultHandles(['top', 'left', 'right'])
     }
   },
   {
     id: 'seqid',
     type: 'custom',
     label: 'Sequence ID',
-    position: { x: 400, y: 500 },
+    position: { x: 450, y: 560 },
+    width: 300,
     data: {
       icon: 'fa-chevron-right',
       handles: defaultHandles(['left', 'right'])
@@ -91,7 +104,8 @@ const nodeDefinitions: Node[] = [
     id: 'specimen-id',
     type: 'custom',
     label: 'Specimen: Molecular ID',
-    position: { x: 400, y: 300 },
+    width: 300,
+    position: { x: 450, y: 310 },
     data: {
       icon: 'fa-chevron-right',
       handles: defaultHandles(['left', 'right'])
@@ -100,8 +114,9 @@ const nodeDefinitions: Node[] = [
   {
     id: 'biomat-id-morpho',
     type: 'custom',
-    label: 'BioMat: Morphological ID',
-    position: { x: 400, y: 0 },
+    label: 'BioMat: Morpho ID',
+    width: 300,
+    position: { x: 450, y: 20 },
     data: {
       icon: 'fa-chevron-right',
       handles: defaultHandles(['left', 'right'])
@@ -111,15 +126,14 @@ const nodeDefinitions: Node[] = [
     id: 'biomat-id-mol',
     type: 'custom',
     label: 'BioMat: Molecular ID',
-    position: { x: 400, y: 100 },
+    width: 300,
+    position: { x: 450, y: 100 },
     data: {
       icon: 'fa-chevron-right',
       handles: defaultHandles(['left', 'right'])
     }
   }
 ]
-
-const nodes = ref(nodeDefinitions)
 
 const edges: Edge[] = [
   {
@@ -222,7 +236,8 @@ const edges: Edge[] = [
     target: 'specimen-id',
     sourceHandle: 'right',
     targetHandle: 'left',
-    type: 'bezier'
+    type: 'bezier',
+    label: 'refers to'
   }
 ]
 </script>

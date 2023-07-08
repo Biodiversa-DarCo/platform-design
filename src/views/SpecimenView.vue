@@ -3,6 +3,7 @@
     <WorkflowHeader title="Specimen" discussion="specimen"></WorkflowHeader>
     <div class="text-body-1"></div>
     <DetailWorkflow :nodes="nodes" :edges="edges" v-bind="$attrs" />
+    <GiscusWrapper term="Specimen"></GiscusWrapper>
   </v-container>
 </template>
 
@@ -15,6 +16,7 @@ import { useVueFlow } from '@vue-flow/core'
 import DetailWorkflow from '@/components/DetailWorkflow.vue'
 import { defaultHandles } from '@/components/MultipleHandleNode.vue'
 import WorkflowHeader from '@/components/WorkflowHeader.vue'
+import GiscusWrapper from '@/components/GiscusWrapper.vue'
 
 useVueFlow({ id: 'biomat' })
 
@@ -25,7 +27,8 @@ const nodeDefinitions: Node[] = [
     id: 'biomat',
     type: 'custom',
     label: 'Biological material',
-    position: { x: 300, y: 0 },
+    position: { x: 350, y: 0 },
+    width: 300,
     data: {
       icon: 'fa-bucket',
       handles: defaultHandles(['bot']),
@@ -36,15 +39,41 @@ const nodeDefinitions: Node[] = [
     id: 'specimen',
     type: 'custom',
     label: 'Specimen',
-    position: { x: 300, y: 150 },
+    position: { x: 350, y: 200 },
+    width: 300,
     data: {
       icon: 'fa-box',
       items: [
-        { title: 'Molecular Code', props: { appendIcon: 'fas fa-hashtag' } },
-        { title: 'Morphological Code', props: { appendIcon: 'fas fa-hashtag' } },
-        { title: 'Tube Code' },
-        { title: 'Molecular number' },
-        { title: 'Type' }
+        {
+          title: 'Morphological Code',
+          appendIcon: 'fas fa-hashtag',
+          content: {
+            text: [
+              'A unique identifier generated as <code>{taxname}|{sampling_code}[{tube}]</code>.',
+              'This definition is not consistent anymore, with regard to changes in the structure leading to tubes in a biologicial material bundle being explicitly modelled.'
+            ]
+          }
+        },
+        {
+          title: 'Molecular Code',
+          appendIcon: 'fas fa-hashtag',
+          content: {
+            text: 'An identifier generated as <code>{taxon#}_{sampling#}_{molecular_number}</code>'
+          }
+        },
+        {
+          title: 'Molecular number',
+          appendIcon: 'fas fa-hashtag',
+          content: {
+            text: 'An identifier used downstream in the sequencing workflow'
+          }
+        },
+        {
+          title: 'Type',
+          content: {
+            text: 'A category, e.g. male/female, juvenile, fragment...'
+          }
+        }
       ],
       handles: defaultHandles()
         .map((handle) =>
@@ -74,9 +103,9 @@ const nodeDefinitions: Node[] = [
     id: 'identification',
     type: 'custom',
     label: 'Identification',
-    position: { x: 700, y: 400 },
+    position: { x: 800, y: 400 },
     data: {
-      icon: 'fa-fingerprint',
+      icon: 'fa-sitemap',
       handles: defaultHandles(['left']),
       target: 'identification'
     }
@@ -86,6 +115,7 @@ const nodeDefinitions: Node[] = [
     type: 'custom',
     label: 'Storage',
     position: { x: 0, y: 400 },
+    width: 200,
     data: {
       icon: 'fa-boxes',
       handles: defaultHandles(['top']),
@@ -96,7 +126,7 @@ const nodeDefinitions: Node[] = [
     id: 'traits',
     type: 'custom',
     label: 'Functional traits',
-    position: { x: 700, y: 100 },
+    position: { x: 800, y: 100 },
     data: {
       icon: 'fa-list',
       handles: defaultHandles(['left']),
@@ -107,18 +137,23 @@ const nodeDefinitions: Node[] = [
     id: 'slide',
     type: 'custom',
     label: 'Slide',
-    position: { x: 0, y: 150 },
+    position: { x: 0, y: 100 },
+    width: 200,
     data: {
       icon: 'fa-microscope',
       handles: defaultHandles(['right', 'bot']),
-      items: [{ title: 'Label' }, { title: 'Date' }]
+      items: [
+        { title: 'Label', content: { text: 'The physical label on the slide' } },
+        { title: 'Date' }
+      ]
     }
   },
   {
     id: 'sequencing',
     type: 'custom',
     label: 'Sequencing',
-    position: { x: 300, y: 600 },
+    position: { x: 350, y: 600 },
+    width: 300,
     data: {
       icon: 'fa-dna',
       handles: defaultHandles(['top']),

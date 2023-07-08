@@ -1,10 +1,10 @@
 <template>
-  <RouterLink :to="{ name: target }" custom v-slot="{ navigate }">
+  <RouterLink :to="targetRoute" custom v-slot="{ navigate }">
     <v-card
       class="node-card"
       height="100%"
       :color="active ? 'orange' : undefined"
-      @click="navigate"
+      @click="exitAndNavigate(navigate)"
     >
       <v-card-item :prepend-icon="icon ? 'fas ' + icon : undefined">
         <v-card-title class="node-label text-overline">
@@ -19,8 +19,12 @@
 <script setup lang="ts">
 import type { Raw } from 'vue'
 import type { HandleSpec } from './MultipleHandleNode.vue'
+import type { NavigationFailure } from 'vue-router'
 import MultipleHandleNode from './MultipleHandleNode.vue'
 import { RouterLink } from 'vue-router'
+import { computed } from 'vue'
+import { useFullscreen } from '@vueuse/core'
+// import { inject } from 'vue'
 
 export type WorkflowNodeData = {
   icon?: string
@@ -29,7 +33,24 @@ export type WorkflowNodeData = {
   target?: string
 }
 
-defineProps<WorkflowNodeData & { label: string; active: boolean }>()
+// const exit: Function | undefined = inject('exitFullscreen')
+async function exitAndNavigate(
+  navigate: (e?: MouseEvent | undefined) => Promise<void | NavigationFailure>
+) {
+  // if (exit !== undefined) {
+  //   await exit()
+  // }
+  navigate()
+}
+
+const props = defineProps<
+  WorkflowNodeData & { label: string; active: boolean; isFullscreen: boolean }
+>()
+
+const targetRoute = computed(() => {
+  let query = props.isFullscreen ? { fullscreen: 'true' } : {}
+  return { name: props.target, query }
+})
 </script>
 
 <style scoped lang="less">

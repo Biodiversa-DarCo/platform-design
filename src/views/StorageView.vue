@@ -1,20 +1,37 @@
 <template>
   <v-container>
     <WorkflowHeader title="Storage" discussion="storage"></WorkflowHeader>
-    <div class="text-body-1"></div>
+    <div class="text-body-1">
+      <p class="mb-3">
+        Storage is organized in collections. A collection is a set of storage containers that target
+        a taxonomic group, and is maintained by some people in the lab.
+      </p>
+      <p class="mb-3">
+        Storage containers in a collection are of three kinds: biological material, specimen slides
+        and DNA samples. Even though they belong to the same collection, they may be physically
+        stored in different places, with different conditions. Collections may include several
+        containers of the same kind.
+      </p>
+      <p class="mb-3">
+        A storage container may contain a mix of elements from several collection. E.g. a specimen
+        slide storage could contain specimen slides identified as different taxa, thus belonging to
+        different collections.
+      </p>
+    </div>
     <DetailWorkflow :nodes="nodes" :edges="edges" v-bind="$attrs" />
+    <GiscusWrapper term="Storage"></GiscusWrapper>
   </v-container>
 </template>
 
 <script setup lang="ts">
 import type { WorkflowNodeData } from '@/components/DetailWorkflowNode.vue'
-import { type Edge, type Node as FlowNode } from '@vue-flow/core'
+import { useVueFlow, type Edge, type Node as FlowNode } from '@vue-flow/core'
 
 import { ref } from 'vue'
-import { useVueFlow } from '@vue-flow/core'
 import DetailWorkflow from '@/components/DetailWorkflow.vue'
 import { defaultHandles } from '@/components/MultipleHandleNode.vue'
 import WorkflowHeader from '@/components/WorkflowHeader.vue'
+import GiscusWrapper from '@/components/GiscusWrapper.vue'
 
 useVueFlow({ id: 'biomat' })
 
@@ -30,9 +47,21 @@ const nodeDefinitions: Node[] = [
       icon: 'fa-boxes',
       handles: defaultHandles(['right']),
       items: [
-        { title: 'Label' },
-        { title: 'Maintainers', props: { appendIcon: 'fas fa-users' } },
-        { title: 'Taxonomic group' }
+        { title: 'Label', content: { text: 'The name of the collection' } },
+        {
+          title: 'Maintainers',
+          appendIcon: 'fas fa-users',
+          content: {
+            text: 'People responsible for the collection'
+          }
+        },
+        {
+          title: 'Taxonomic group',
+          appendIcon: 'fas fa-sitemap',
+          content: {
+            text: 'Target taxonomic group of the collection'
+          }
+        }
       ]
     }
   },
@@ -44,7 +73,10 @@ const nodeDefinitions: Node[] = [
     data: {
       icon: 'fa-box',
       handles: defaultHandles(['left', 'right']),
-      items: [{ title: 'Label' }, { title: 'Description' }]
+      items: [
+        { title: 'Label', content: { text: 'The physical label of the storage container' } },
+        { title: 'Description' }
+      ]
     }
   },
   {
@@ -55,7 +87,10 @@ const nodeDefinitions: Node[] = [
     data: {
       icon: 'fa-box',
       handles: defaultHandles(['left', 'right']),
-      items: [{ title: 'Label' }, { title: 'Description' }]
+      items: [
+        { title: 'Label', content: { text: 'The physical label of the storage container' } },
+        { title: 'Description' }
+      ]
     }
   },
   {
@@ -66,15 +101,20 @@ const nodeDefinitions: Node[] = [
     data: {
       icon: 'fa-box',
       handles: defaultHandles(['left', 'right']),
-      items: [{ title: 'Label' }]
+      items: [
+        { title: 'Label', content: { text: 'The physical label of the storage container' } },
+        { title: 'Description' }
+      ]
     }
   },
   {
     id: 'biomat',
     type: 'custom',
     label: 'Biological Material',
-    position: { x: 900, y: 0 },
+    position: { x: 900, y: 45 },
+    width: 300,
     data: {
+      icon: 'fa-box',
       handles: defaultHandles(['left']),
       target: 'biomat'
     }
@@ -83,8 +123,10 @@ const nodeDefinitions: Node[] = [
     id: 'specimen',
     type: 'custom',
     label: 'Specimen (slides)',
-    position: { x: 900, y: 200 },
+    position: { x: 900, y: 245 },
+    width: 300,
     data: {
+      icon: 'fa-microscope',
       handles: defaultHandles(['left']),
       target: 'biomat'
     }
@@ -93,10 +135,12 @@ const nodeDefinitions: Node[] = [
     id: 'dna',
     type: 'custom',
     label: 'Sequencing [DNA]',
-    position: { x: 900, y: 400 },
+    position: { x: 900, y: 445 },
+    width: 300,
     data: {
+      icon: 'fa-dna',
       handles: defaultHandles(['left']),
-      target: 'biomat'
+      target: 'sequencing'
     }
   }
 ]
