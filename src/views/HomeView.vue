@@ -44,8 +44,11 @@ import GiscusWrapper from '@/components/GiscusWrapper.vue'
               account for everyone's work practices.
             </p>
             <p>
-              As you go through the workflow structure, please note which parts are unfit to your
-              need, or unclear, as well as features that are missing altogether.
+              As you go through the workflow structure, feel free to comment on which parts are
+              unfit to your need, or unclear, as well as features that are missing altogether. A
+              <a href="https://github.com/">GitHub</a> account is required to use the comment
+              section at the bottom of each page: if this is inconvenient, emails are also perfectly
+              fine.
             </p>
           </v-card-text>
         </v-card>
