@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <WorkflowHeader title="External sequence" discussion="biological-material"></WorkflowHeader>
+    <WorkflowHeader title="External sequence"></WorkflowHeader>
     <div class="text-body-1">
       <p class="mb-3">
         A gene sequence that was not produced in the lab, but was imported from published data in

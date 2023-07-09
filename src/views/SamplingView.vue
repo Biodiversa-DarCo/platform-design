@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <WorkflowHeader title="Sampling" discussion="sampling"></WorkflowHeader>
+    <WorkflowHeader title="Sampling"></WorkflowHeader>
     <p class="mb-3">
       Sample collection is the starting point of the research workflow. A sampling operation is done
       on a site, whose coordinates and location are kept track of, as well as some descriptive

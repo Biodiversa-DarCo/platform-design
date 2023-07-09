@@ -1,7 +1,6 @@
 <template>
   <v-container>
-    <WorkflowHeader title="Morphological and molecular identification" discussion="identification">
-    </WorkflowHeader>
+    <WorkflowHeader title="Morphological and molecular identification"> </WorkflowHeader>
     <p class="mb-3">
       Biological samples can be assigned to a taxonomic group using either morphological or
       molecular criteria.

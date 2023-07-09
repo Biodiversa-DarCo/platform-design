@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <WorkflowHeader title="Storage" discussion="storage"></WorkflowHeader>
+    <WorkflowHeader title="Storage"></WorkflowHeader>
     <div class="text-body-1">
       <p class="mb-3">
         Storage is organized in collections. A collection is a set of storage containers that target

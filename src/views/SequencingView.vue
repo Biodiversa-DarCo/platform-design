@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <WorkflowHeader title="Sequencing" discussion="sequencing"></WorkflowHeader>
+    <WorkflowHeader title="Sequencing"></WorkflowHeader>
     <div class="text-body-1">
       <p>
         The sequencing pipeline starts with DNA extraction from a specimen. The resulting DNA sample

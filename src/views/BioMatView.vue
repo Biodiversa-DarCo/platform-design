@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <WorkflowHeader title="Biological material" discussion="biological-material"></WorkflowHeader>
+    <WorkflowHeader title="Biological material"></WorkflowHeader>
     <div class="text-body-1">
       <p class="mb-3">
         A biological material bundle contains several specimens that are all identified to a single

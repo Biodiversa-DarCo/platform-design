@@ -1,9 +1,6 @@
 <template>
   <v-container>
-    <WorkflowHeader
-      title="Species Hypotheses (MOTU)"
-      discussion="species-hypotheses"
-    ></WorkflowHeader>
+    <WorkflowHeader title="Species Hypotheses (MOTU)"></WorkflowHeader>
     <p class="mb-3">
       A MOTU (Molecular Operational Taxonomic Unit) is a grouping of individuals by sequence
       similarity, at a potentially finer level than the species.

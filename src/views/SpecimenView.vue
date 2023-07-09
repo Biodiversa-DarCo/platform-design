@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <WorkflowHeader title="Specimen" discussion="specimen"></WorkflowHeader>
+    <WorkflowHeader title="Specimen"></WorkflowHeader>
     <div class="text-body-1">
       <p>
         A specimen is a single individual isolated from a biological material bundle, from which it
