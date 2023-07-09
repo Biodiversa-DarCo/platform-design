@@ -108,7 +108,7 @@ const externalNodes: Node[] = [
     position: { x: 200, y: 500 },
     data: {
       ...commonNodes.identification.data,
-      target: 'external-identification',
+      target: 'identification',
       handles: defaultHandles(['top'])
     }
   },

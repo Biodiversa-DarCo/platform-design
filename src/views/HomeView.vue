@@ -15,7 +15,11 @@ import GiscusWrapper from '@/components/GiscusWrapper.vue'
             <p class="mb-3">
               This is a simplified representation of the research workflow as it is modelled in the
               current implementation of GOTIT, an ecological data management platform that is used
-              at LEHNA to manage the lab research activities on asellids biodiversity.
+              at LEHNA to manage the lab research activities on asellids biodiversity. It is not an
+              exact specification of a database schema, but is very similar to the actual schema
+              that is implemented in GOTIT. Some elements are not presented, such as the
+              modelisation of users/persons, or references to the literature, because they are
+              implementation details and are not immediately necessary to understand the model.
             </p>
 
             <p class="mb-3">
@@ -26,10 +30,13 @@ import GiscusWrapper from '@/components/GiscusWrapper.vue'
             </p>
 
             <p class="mb-3">
-              Arrows represent the direction of data flow, starting from the sampling of specimens
-              in their habitat, up to molecular barcoding. Each node represents a main component of
-              the research workflow, and hides most of the complexity in the workflow structure to
-              make the general model more intelligible. Clicking on a node summons a more detailed
+              There are two main aspects in this workflow: one is dedicated to modeling the
+              generation of "internal" data, sampled and analyzed by the lab; the other allows the
+              integration of "external" data from the literature or public databases. Arrows
+              represent the direction of data flow, starting from the sampling of specimens in their
+              habitat, up to molecular barcoding. Each node represents a main component of the
+              research workflow, and hides most of the complexity in the workflow structure to make
+              the general model more intelligible. Clicking on a node takes you to a more detailed
               view of its internal components, and their purpose.
             </p>
             <p class="mb-3">

@@ -1,9 +1,6 @@
 <template>
   <v-container>
-    <WorkflowHeader
-      title="External biological material"
-      discussion="biological-material"
-    ></WorkflowHeader>
+    <WorkflowHeader title="External biological material"></WorkflowHeader>
     <div class="text-body-1">
       <p class="mb-3">
         External biological material bundles are a collection of specimen published in the
@@ -132,7 +129,8 @@ const edges: Edge[] = [
     source: 'biomat',
     target: 'identification',
     sourceHandle: 'right',
-    targetHandle: 'left'
+    targetHandle: 'left',
+    animated: true
   },
   {
     id: 'biomat-traits',

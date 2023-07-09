@@ -190,7 +190,8 @@ const edges: Edge[] = [
     source: 'specimen',
     target: 'identification',
     sourceHandle: 'right',
-    targetHandle: 'left'
+    targetHandle: 'left',
+    animated: true
   },
   {
     id: 'specimen-traits',

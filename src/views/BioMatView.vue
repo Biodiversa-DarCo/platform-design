@@ -244,7 +244,8 @@ const edges: Edge[] = [
     target: 'specimen',
     sourceHandle: 'right',
     targetHandle: 'top',
-    label: 'contains some'
+    label: 'contains some',
+    animated: true
   }
 ]
 </script>

@@ -2,6 +2,11 @@
   <v-container>
     <WorkflowHeader title="Morphological and molecular identification"> </WorkflowHeader>
     <p class="mb-3">
+      Taxonomy is represented as a hierarchical structure, where one record represents a specific
+      taxon, which can be any rank. Each taxon refers to its direct parent in the taxonomy, up to
+      the root taxon which is set depending on the focus of the database (e.g. Asellidae).
+    </p>
+    <p class="mb-3">
       Biological samples can be assigned to a taxonomic group using either morphological or
       molecular criteria.
     </p>
