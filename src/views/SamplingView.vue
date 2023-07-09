@@ -181,7 +181,7 @@ const nodeDefinitions: Node[] = [
     label: 'External sequences',
     position: { x: 700, y: 500 },
     data: {
-      icon: 'fa-box',
+      icon: 'fa-dna',
       handles: defaultHandles(['left']),
       target: 'external-sequence'
     }

@@ -23,7 +23,6 @@ import type { NavigationFailure } from 'vue-router'
 import MultipleHandleNode from './MultipleHandleNode.vue'
 import { RouterLink } from 'vue-router'
 import { computed } from 'vue'
-import { useFullscreen } from '@vueuse/core'
 // import { inject } from 'vue'
 
 export type WorkflowNodeData = {

@@ -1,6 +1,22 @@
 <template>
   <v-container>
     <WorkflowHeader title="Sequencing" discussion="sequencing"></WorkflowHeader>
+    <div class="text-body-1">
+      <p>
+        The sequencing pipeline starts with DNA extraction from a specimen. The resulting DNA sample
+        is amplified through PCR. Amplified DNA material is sequenced by an external sequencing
+        institute, which provides raw sequencing results in the form of chromatograms. A sequence is
+        then assembled using one or more chromatograms.
+      </p>
+      <p>
+        At each step of the sequencing workflow, intermediary products are annotated with an
+        evaluation of their quality, among other relevant properties.
+      </p>
+      <p>
+        A sequence can be annotated with taxonomic information, either using the reference taxonomy,
+        or using a more precise delimitation in Molecular Operational Taxonomic Units (MOTU).
+      </p>
+    </div>
     <DetailWorkflow :nodes="nodes" :edges="edges" v-bind="$attrs" />
     <GiscusWrapper term="Sequencing"></GiscusWrapper>
   </v-container>
@@ -34,7 +50,7 @@ const nodeDefinitions: Node[] = [
     label: 'DNA',
     position: { x: 0, y: 230 },
     data: {
-      handles: defaultHandles(['top', 'left']),
+      handles: defaultHandles(['top', 'left', 'bot']),
       icon: 'fa-dna',
       items: [
         {
@@ -43,7 +59,7 @@ const nodeDefinitions: Node[] = [
           content: { text: 'A unique identifier for the DNA sample' }
         },
         { title: 'Concentration', content: { text: 'DNA sample concentration' } },
-        { title: 'Quality' },
+        { title: 'Quality', content: { text: 'DNA sample quality' } },
         { title: 'Extraction date' },
         {
           title: 'Extraction method',
@@ -63,7 +79,14 @@ const nodeDefinitions: Node[] = [
     data: {
       icon: 'fa-refresh',
       items: [
-        { title: 'Number' },
+        { title: 'Number', content: { text: 'A user defined short identifier' } },
+        {
+          title: 'Code',
+          appendIcon: 'fas fa-hashtag',
+          content: {
+            text: 'An identifier generated as <code>{DNA_code}_{PCR_number}_{forward_primer}_{reverse_primer}</code>'
+          }
+        },
         { title: 'Date' },
         {
           title: 'Details',
@@ -78,7 +101,12 @@ const nodeDefinitions: Node[] = [
           }
         },
         { title: 'Quality', content: { text: 'PCR quality, e.g. good / failure' } },
-        { title: 'Specificity' },
+        {
+          title: 'Specificity',
+          content: {
+            text: 'A qualifier for the kind of PCR, e.g. gel-cut, reamplification, DNA dilution'
+          }
+        },
         {
           title: 'Primers',
           content: {
@@ -98,7 +126,7 @@ const nodeDefinitions: Node[] = [
     data: {
       icon: 'fa-chart-column',
       items: [
-        { title: 'Number' },
+        { title: 'Number', content: { text: 'A user-defined short identifier' } },
         {
           title: 'Code',
           appendIcon: 'fas fa-hashtag',
@@ -110,7 +138,16 @@ const nodeDefinitions: Node[] = [
           title: 'Sequencing institute',
           content: { text: 'The institution responsible for the sequencing' }
         },
-        { title: 'Quality' },
+        {
+          title: 'Quality',
+          content: {
+            text: [
+              'A qualification of the sequence.',
+              'This distinguishes between "valid" sequences and other sequences that have undesirable features.',
+              'e.g. contaminated or truncated'
+            ]
+          }
+        },
         {
           title: 'Primer',
           content: { text: 'Chromatogram primer picked from a list of registered primers.' }
@@ -184,6 +221,18 @@ const nodeDefinitions: Node[] = [
       target: 'motu',
       icon: 'fa-tags'
     }
+  },
+  {
+    id: 'storage',
+    type: 'custom',
+    label: 'Storage',
+    position: { x: 0, y: 700 },
+    width: 270,
+    data: {
+      handles: defaultHandles(['top']),
+      target: 'storage',
+      icon: 'fa-boxes'
+    }
   }
 ]
 
@@ -240,6 +289,14 @@ const edges: Edge[] = [
     target: 'motu',
     sourceHandle: 'right',
     targetHandle: 'left',
+    animated: true
+  },
+  {
+    id: 'seq-storage',
+    source: 'DNA',
+    target: 'storage',
+    sourceHandle: 'bot',
+    targetHandle: 'top',
     animated: true
   }
 ]

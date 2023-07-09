@@ -6,12 +6,10 @@
     ></WorkflowHeader>
     <div class="text-body-1">
       <p class="mb-3">
-        A biological material bundle contains several specimens that are all identified to a single
-        taxonomic group.
-      </p>
-      <p class="mb-3">
-        Functional traits can be attached to a biological material bundle to describe specimens it
-        contains.
+        External biological material bundles are a collection of specimen published in the
+        literature or public databases. Their content is not modelled as precisely as internal
+        biological material, but is summarized as an approximate number of specimens, their
+        taxonomic group, and possibly some functional traits.
       </p>
     </div>
     <DetailWorkflow :nodes="nodes" :edges="edges" v-bind="$attrs" />

@@ -4,7 +4,8 @@
     <div class="text-body-1">
       <p class="mb-3">
         A biological material bundle contains several specimens that are all identified to a single
-        taxonomic group (at least at this point, see the Identification workflow).
+        taxonomic group. Specimens are distributed in one or several tubes, which may contain one or
+        more specimen.
       </p>
       <p class="mb-">
         Functional traits can be attached to a biological material bundle to describe specimens it

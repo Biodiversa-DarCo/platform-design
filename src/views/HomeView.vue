@@ -57,5 +57,6 @@ import GiscusWrapper from '@/components/GiscusWrapper.vue'
       :prevent-scrolling="false"
       :nodes-draggable="false"
     />
+    <GiscusWrapper term="General workflow"></GiscusWrapper>
   </v-container>
 </template>

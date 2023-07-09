@@ -1,7 +1,18 @@
 <template>
   <v-container>
     <WorkflowHeader title="Specimen" discussion="specimen"></WorkflowHeader>
-    <div class="text-body-1"></div>
+    <div class="text-body-1">
+      <p>
+        A specimen is a single individual isolated from a biological material bundle, from which it
+        inherits a morphological identification. This identification may be revised at any time, by
+        splitting the original biological material bundle in two, so that each bundle has a
+        homogeneous content regarding the taxonomy.
+      </p>
+      <p>
+        A specimen might be mounted on a slide for microscope analysis, which is stored separately
+        among other specimen slides.
+      </p>
+    </div>
     <DetailWorkflow :nodes="nodes" :edges="edges" v-bind="$attrs" />
     <GiscusWrapper term="Specimen"></GiscusWrapper>
   </v-container>
@@ -75,9 +86,9 @@ const nodeDefinitions: Node[] = [
           }
         }
       ],
-      handles: defaultHandles()
+      handles: defaultHandles(['top', 'right', 'bot'])
         .map((handle) =>
-          [Position.Right, Position.Left].includes(handle.position)
+          [Position.Right].includes(handle.position)
             ? { ...handle, style: { bottom: '20%', top: 'auto' } }
             : handle
         )

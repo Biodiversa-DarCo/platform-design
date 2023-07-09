@@ -74,7 +74,7 @@ const nodes: Node[] = [
     id: 'taxon',
     type: 'custom',
     label: 'Taxon',
-    position: { x: 900, y: 200 },
+    position: { x: 850, y: 200 },
     data: {
       icon: 'fa-sitemap',
       items: [
@@ -86,7 +86,7 @@ const nodes: Node[] = [
         },
         { title: 'Rank', content: { text: 'Taxonomic rank, e.g. order, family, genus... ' } }
       ],
-      handles: defaultHandles(['top', 'left', 'right'])
+      handles: defaultHandles()
     }
   },
   {
@@ -131,6 +131,30 @@ const nodes: Node[] = [
     data: {
       icon: 'fa-chevron-right',
       handles: defaultHandles(['left', 'right'])
+    }
+  },
+  {
+    id: 'external-biomat',
+    type: 'custom',
+    label: 'Ext. bio. material',
+    width: 300,
+    position: { x: 1000, y: 450 },
+    data: {
+      icon: 'fa-box',
+      handles: defaultHandles(['left']),
+      target: 'external-biomat'
+    }
+  },
+  {
+    id: 'external-seq',
+    type: 'custom',
+    label: 'External sequence',
+    width: 300,
+    position: { x: 1000, y: 550 },
+    data: {
+      icon: 'fa-box',
+      handles: defaultHandles(['left']),
+      target: 'external-sequence'
     }
   }
 ]
@@ -238,6 +262,22 @@ const edges: Edge[] = [
     targetHandle: 'left',
     type: 'bezier',
     label: 'refers to'
+  },
+  {
+    id: 'taxon-ext-seq',
+    target: 'taxon',
+    source: 'external-seq',
+    targetHandle: 'bot',
+    sourceHandle: 'left',
+    animated: true
+  },
+  {
+    id: 'taxon-ext-biomat',
+    target: 'taxon',
+    source: 'external-biomat',
+    targetHandle: 'bot',
+    sourceHandle: 'left',
+    animated: true
   }
 ]
 </script>
