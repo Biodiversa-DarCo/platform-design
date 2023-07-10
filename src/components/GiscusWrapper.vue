@@ -2,7 +2,7 @@
   <div class="comment-container">
     <Giscus
       id="comments"
-      repo="lsdch/darco-platform-design"
+      repo="Biodiversa-DarCo/platform-design"
       repo-id="R_kgDOJ1DOUg"
       mapping="specific"
       category="General"

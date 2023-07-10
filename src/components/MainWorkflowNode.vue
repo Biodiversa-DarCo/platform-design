@@ -42,13 +42,10 @@ async function exitAndNavigate(
   navigate()
 }
 
-const props = defineProps<
-  WorkflowNodeData & { label: string; active: boolean; isFullscreen: boolean }
->()
+const props = defineProps<WorkflowNodeData & { label: string; active: boolean }>()
 
 const targetRoute = computed(() => {
-  let query = props.isFullscreen ? { fullscreen: 'true' } : {}
-  return { name: props.target, query }
+  return { name: props.target }
 })
 </script>
 
