@@ -316,7 +316,7 @@ const buttons = [{ text: 'Internal data' }, { text: 'External data' }]
     :default-edge-options="defaultEdgeOptions"
     class="mx-auto"
   >
-    <v-item-group v-model="view">
+    <v-item-group v-model="view" mandatory>
       <Panel :position="PanelPosition.TopLeft" class="d-flex flex-column">
         <v-item v-for="{ text } in buttons" :key="text" v-slot="{ isSelected, toggle }">
           <v-btn class="mb-3" :class="isSelected ? 'bg-info' : ''" @click="toggle">
