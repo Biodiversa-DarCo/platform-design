@@ -12,7 +12,7 @@ const { drawer, toggleDrawer } = useDrawerStore()
       <v-app-bar-nav-icon variant="text" @click="toggleDrawer"></v-app-bar-nav-icon>
       <RouterLink to="/" custom v-slot="{ navigate }">
         <button @click="navigate">
-          <v-toolbar-title @click="navigate">DarCo Workflow</v-toolbar-title>
+          <v-toolbar-title @click="navigate">DarCo: Platform design</v-toolbar-title>
         </button>
       </RouterLink>
       <v-spacer></v-spacer>
