@@ -26,6 +26,11 @@ const router = createRouter({
       component: () => import ('../views/SpecimenView.vue')
     },
     {
+      path: '/batch',
+      name: "batch",
+      component: () => import ('../views/BatchView.vue')
+    },
+    {
       path: '/sequencing',
       name: 'sequencing',
       component: () => import ('../views/SequencingView.vue')
