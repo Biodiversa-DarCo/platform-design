@@ -1,6 +1,6 @@
 <template>
   <v-card class="node-card" variant="outlined">
-    <v-card-item :prepend-icon="'fas ' + icon">
+    <v-card-item :prepend-icon="icon ? 'fas ' + icon : undefined">
       <v-card-title class="node-label">
         <span class="text-overline">{{ label }}</span>
       </v-card-title>

@@ -29,7 +29,7 @@ export type WorkflowNodeData = {
   icon?: string
   handles?: HandleSpec[]
   component?: Raw<object>
-  target?: string
+  target: string
 }
 
 // const exit: Function | undefined = inject('exitFullscreen')
@@ -42,10 +42,14 @@ async function exitAndNavigate(
   navigate()
 }
 
-const props = defineProps<WorkflowNodeData & { label: string; active: boolean }>()
+const props = defineProps<
+  WorkflowNodeData & { label: string; active: boolean; isFullscreen: boolean }
+>()
 
 const targetRoute = computed(() => {
-  return { name: props.target }
+  return props.isFullscreen
+    ? { name: props.target, query: { fullscreen: props.isFullscreen.toString() } }
+    : { name: props.target }
 })
 </script>
 

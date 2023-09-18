@@ -46,19 +46,14 @@ const router = createRouter({
       component: () => import ('../views/MotuView.vue')
     },
     {
-      path: "/external/biomat",
-      name: "external-biomat",
+      path: "/external",
+      name: "external",
       component: () => import ('../views/external/BioMatView.vue')
     },
     {
-      path: "/external/sequence",
-      name: "external-sequence",
-      component: () => import ('../views/external/SequenceView.vue')
-    },
-    {
-      path: "/external/identification",
-      name: "external-identification",
-      component: () => import ('../views/external/IdentificationView.vue')
+      path: "/taxonomy",
+      name: "taxonomy",
+      component: () => import ('../views/TaxonomyView.vue')
     }
   ]
 })

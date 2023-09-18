@@ -82,24 +82,37 @@ const externalNodes: Node[] = [
   commonNodes.sampling,
   {
     ...commonNodes.biomat,
-    id: 'external-biomat',
+    id: 'external',
     label: 'External Bio. Mat.',
     data: {
       ...commonNodes.biomat.data,
-      target: 'external-biomat',
+      target: 'external',
       handles: defaultHandles(['top', 'bot'])
     },
-    position: { x: 100, y: 300 }
+    position: { x: 100, y: 250 }
   },
   {
     id: 'external-sequence',
     type: 'custom',
     label: 'External sequence',
-    position: { x: 500, y: 300 },
+    position: { x: 500, y: 250 },
     data: {
       icon: 'fa-dna',
-      target: 'external-sequence',
-      handles: defaultHandles(['top', 'right', 'bot'])
+      target: 'external',
+      handles: defaultHandles(['top', 'bot'])
+        .map((handle) =>
+          handle.position === Position.Bottom
+            ? { ...handle, style: { left: '20%', right: 'auto' } }
+            : handle
+        )
+        .concat([
+          {
+            id: 'bottom-right',
+            type: 'source',
+            position: Position.Bottom,
+            style: { right: '20%', left: 'auto' }
+          }
+        ])
     }
   },
   {
@@ -116,9 +129,9 @@ const externalNodes: Node[] = [
     id: 'external-motu',
     label: 'Species hypotheses',
     type: 'custom',
-    position: { x: 600, y: 500 },
+    position: { x: 585, y: 500 },
     data: {
-      handles: [{ type: 'source', id: 'right', position: Position.Right }],
+      handles: [{ type: 'source', id: 'top', position: Position.Top }],
       icon: 'fa-tags',
       target: 'motu'
     }
@@ -200,12 +213,12 @@ const externalEdges: Edge[] = [
   {
     id: 'sampling-biomat',
     source: 'sampling',
-    target: 'external-biomat'
+    target: 'external'
   },
   {
     id: 'id-biomat',
     type: 'step',
-    source: 'external-biomat',
+    source: 'external',
     target: 'external-identification',
     sourceHandle: 'bot',
     targetHandle: 'handleTop'
@@ -229,7 +242,7 @@ const externalEdges: Edge[] = [
     type: 'step',
     source: 'external-sequence',
     target: 'external-motu',
-    sourceHandle: 'right',
+    sourceHandle: 'bottom-right',
     targetHandle: 'right'
   }
 ]
@@ -325,8 +338,10 @@ const buttons = [{ text: 'Internal data' }, { text: 'External data' }]
         </v-item>
       </Panel>
     </v-item-group>
-    <template #node-custom="{ data, label, id }">
-      <MainWorkflowNode v-bind="{ label, active: id === activeNodeName, ...data }" />
+    <template #node-custom="{ data, label }">
+      <MainWorkflowNode
+        v-bind="{ label, active: data.target === activeNodeName, isFullscreen: false, ...data }"
+      />
     </template>
   </VueFlow>
 </template>

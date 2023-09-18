@@ -4,6 +4,7 @@
       :class="isFullscreen ? 'fullscreen' : ''"
       :nodes="nodes"
       :edges="edges"
+      :style="style"
       fit-view-on-init
       :defaultEdgeOptions="defaultEdgeOptions"
       :zoom-on-scroll="false"
@@ -13,6 +14,9 @@
       :zoom-on-double-click="false"
       @viewport-change="() => fitView({ padding: 0.15 })"
     >
+      <template v-for="(_, slot) of $slots" v-slot:[slot]="scope">
+        <slot :name="slot" v-bind="scope" />
+      </template>
       <Panel :position="PanelPosition.TopRight" class="d-flex flex-column">
         <v-btn icon="fa fa-maximize" @click="toggleFullscreen"> </v-btn>
       </Panel>
@@ -30,6 +34,7 @@
 
 <script lang="ts">
 import type { WorkflowNodeData } from './DetailWorkflowNode.vue'
+import type { CSSProperties } from 'vue'
 export interface Node extends FlowNode<WorkflowNodeData> {}
 </script>
 
@@ -47,7 +52,7 @@ const route = useRoute()
 const { fitView } = useVueFlow({ id: 'workflow-details' })
 
 const flowContainer = ref(null)
-const isFullscreen = ref('fullscreen' in route.query)
+const isFullscreen = ref(route.query.fullscreen === 'true')
 
 async function toggleFullscreen(): Promise<void> {
   isFullscreen.value = !isFullscreen.value
@@ -56,6 +61,7 @@ async function toggleFullscreen(): Promise<void> {
 defineProps<{
   nodes: Node[]
   edges: Edge[]
+  style?: CSSProperties
 }>()
 
 const defaultEdgeOptions = {

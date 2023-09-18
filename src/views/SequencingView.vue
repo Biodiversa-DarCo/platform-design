@@ -121,7 +121,7 @@ const nodeDefinitions: Node[] = [
   {
     id: 'chromato',
     type: 'custom',
-    label: 'Chromatogramme',
+    label: 'Chromatogram',
     position: { x: 550, y: 250 },
     data: {
       icon: 'fa-chart-column',

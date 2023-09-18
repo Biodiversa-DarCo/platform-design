@@ -116,7 +116,8 @@ const nodeDefinitions: Node[] = [
     id: 'specimen',
     type: 'custom',
     label: 'Specimens',
-    position: { x: 340, y: 600 },
+    position: { x: 300, y: 550 },
+    width: 300,
     data: {
       icon: 'fa-locust',
       handles: defaultHandles(['top']),
@@ -127,10 +128,10 @@ const nodeDefinitions: Node[] = [
     id: 'identification',
     type: 'custom',
     label: 'Identification',
-    position: { x: 700, y: 400 },
+    position: { x: 700, y: 450 },
     data: {
       icon: 'fa-sitemap',
-      handles: defaultHandles(['left']),
+      handles: defaultHandles(['top']),
       target: 'identification'
     }
   },
@@ -146,13 +147,13 @@ const nodeDefinitions: Node[] = [
     }
   },
   {
-    id: 'tube',
+    id: 'bundle',
     type: 'custom',
-    label: 'Tube',
+    label: 'Bundled specimens',
     position: { x: 0, y: 450 },
     data: {
       icon: 'fa-vial',
-      handles: defaultHandles(['top', 'right']),
+      handles: defaultHandles(['top']),
       items: [
         {
           title: 'Label',
@@ -178,18 +179,7 @@ const nodeDefinitions: Node[] = [
     data: {
       icon: 'fa-list',
       handles: defaultHandles(['left']),
-      items: [
-        {
-          title: 'Kind',
-          content: {
-            text: [
-              'A trait name, e.g. pigmentation.',
-              'Picked from a configurable list of registered traits.'
-            ]
-          }
-        },
-        { title: 'Value', content: { text: 'A trait value' } }
-      ]
+      items: [{ title: 'Work in progress' }]
     }
   }
 ]
@@ -211,8 +201,9 @@ const edges: Edge[] = [
     source: 'biomat',
     target: 'identification',
     sourceHandle: 'right',
-    targetHandle: 'left',
-    animated: true
+    targetHandle: 'top',
+    animated: true,
+    label: 'morphological'
   },
   {
     id: 'biomat-storage',
@@ -233,16 +224,16 @@ const edges: Edge[] = [
   {
     id: 'biomat-tubes',
     source: 'biomat',
-    target: 'tube',
+    target: 'bundle',
     sourceHandle: 'left',
     targetHandle: 'left',
     label: 'contains some'
   },
   {
-    id: 'tubes-specimen',
-    source: 'tube',
+    id: 'biomat-specimen',
+    source: 'biomat',
     target: 'specimen',
-    sourceHandle: 'right',
+    sourceHandle: 'bottom',
     targetHandle: 'top',
     label: 'contains some',
     animated: true

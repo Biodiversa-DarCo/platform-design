@@ -46,7 +46,7 @@ const nodeDefinitions: Node[] = [
     data: {
       handles: defaultHandles(['bot']),
       icon: 'fa-dna',
-      target: 'external-sequence'
+      target: 'external'
     }
   },
   {

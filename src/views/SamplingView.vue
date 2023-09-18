@@ -75,10 +75,23 @@ const nodeDefinitions: Node[] = [
     }
   },
   {
+    id: 'abiotic',
+    type: 'custom',
+    label: 'Abiotic measurement',
+    width: 300,
+    position: { x: 400, y: 0 },
+    data: {
+      icon: 'fa-temperature-half',
+      handles: defaultHandles().filter(({ id }) => ['left', 'bot'].includes(id)),
+      items: [{ title: 'Parameter' }, { title: 'Value' }]
+    }
+  },
+  {
     id: 'sampling',
     type: 'custom',
     label: 'Sampling',
-    position: { x: 400, y: 0 },
+    width: 300,
+    position: { x: 400, y: 200 },
     data: {
       icon: 'fa-bucket',
       items: [
@@ -100,15 +113,6 @@ const nodeDefinitions: Node[] = [
           appendIcon: 'fas fa-users',
           content: {
             text: 'People that took part in the sampling operation'
-          }
-        },
-        {
-          title: 'Conditions',
-          content: {
-            text: [
-              'Some abiotic parameters measured during the sampling.',
-              'In Gotit, these are the temperature and specific conductance of the water.'
-            ]
           }
         },
         {
@@ -134,7 +138,7 @@ const nodeDefinitions: Node[] = [
     id: 'program',
     type: 'custom',
     label: 'Program',
-    position: { x: 700, y: 0 },
+    position: { x: 800, y: 260 },
     data: {
       icon: 'fa-file-circle-check',
       items: [
@@ -157,7 +161,7 @@ const nodeDefinitions: Node[] = [
     id: 'biomat',
     type: 'custom',
     label: 'Biological material',
-    position: { x: 150, y: 500 },
+    position: { x: 0, y: 600 },
     data: {
       icon: 'fa-box',
       handles: defaultHandles(['right']),
@@ -167,25 +171,27 @@ const nodeDefinitions: Node[] = [
   {
     id: 'ext-biomat',
     type: 'custom',
-    label: 'External bio material',
-    position: { x: 700, y: 400 },
+    label: 'External occurrences',
+    position: { x: 800, y: 600 },
+    width: 320,
     data: {
       icon: 'fa-box',
       handles: defaultHandles(['left']),
-      target: 'external-biomat'
-    }
-  },
-  {
-    id: 'ext-sequence',
-    type: 'custom',
-    label: 'External sequences',
-    position: { x: 700, y: 500 },
-    data: {
-      icon: 'fa-dna',
-      handles: defaultHandles(['left']),
-      target: 'external-sequence'
+      target: 'external'
     }
   }
+  // {
+  //   id: 'ext-sequence',
+  //   type: 'custom',
+  //   label: 'External sequences',
+  //   position: { x: 800, y: 700 },
+  //   width: 320,
+  //   data: {
+  //     icon: 'fa-dna',
+  //     handles: defaultHandles(['left']),
+  //     target: 'external-sequence'
+  //   }
+  // }
 ]
 
 const nodes = ref(nodeDefinitions)
@@ -228,6 +234,22 @@ const edges: Edge[] = [
     sourceHandle: 'bot',
     targetHandle: 'left',
     animated: true
+  },
+  {
+    id: 'location-abiotic',
+    source: 'location',
+    target: 'abiotic',
+    sourceHandle: 'right',
+    targetHandle: 'left',
+    animated: true
+  },
+  {
+    id: 'abiotic-sampling',
+    source: 'abiotic',
+    target: 'sampling',
+    sourceHandle: 'bot',
+    targetHandle: 'top'
+    // animated: true,
   }
 ]
 </script>

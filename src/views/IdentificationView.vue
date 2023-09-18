@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Edge } from '@vue-flow/core'
+import { MarkerType, type Edge } from '@vue-flow/core'
 import type { Node } from '@/components/DetailWorkflow.vue'
 
 import { defaultHandles } from '@/components/MultipleHandleNode.vue'
@@ -54,7 +54,7 @@ const nodes: Node[] = [
     id: 'specimen',
     type: 'custom',
     label: 'Specimen',
-    position: { x: 0, y: 300 },
+    position: { x: 0, y: 250 },
     width: 300,
     data: {
       handles: defaultHandles(['top', 'right', 'bot']),
@@ -66,7 +66,7 @@ const nodes: Node[] = [
     id: 'sequence',
     type: 'custom',
     label: 'Sequence',
-    position: { x: 0, y: 550 },
+    position: { x: 0, y: 450 },
     width: 300,
     data: {
       target: 'sequencing',
@@ -75,29 +75,22 @@ const nodes: Node[] = [
     }
   },
   {
-    id: 'taxon',
+    id: 'taxonomy',
     type: 'custom',
-    label: 'Taxon',
-    position: { x: 850, y: 200 },
+    label: 'Taxonomy',
+    position: { x: 800, y: 50 },
+    width: 280,
     data: {
       icon: 'fa-sitemap',
-      items: [
-        { title: 'Name', content: { text: 'Taxon name' } },
-        {
-          title: 'Code',
-          appendIcon: 'fas fa-hashtag',
-          content: { text: 'A unique short name to be used when refering to the taxon' }
-        },
-        { title: 'Rank', content: { text: 'Taxonomic rank, e.g. order, family, genus... ' } }
-      ],
-      handles: defaultHandles()
+      target: 'taxonomy',
+      handles: defaultHandles(['bot'])
     }
   },
   {
     id: 'seqid',
     type: 'custom',
     label: 'Sequence ID',
-    position: { x: 450, y: 560 },
+    position: { x: 400, y: 460 },
     width: 300,
     data: {
       icon: 'fa-chevron-right',
@@ -109,7 +102,7 @@ const nodes: Node[] = [
     type: 'custom',
     label: 'Specimen: Molecular ID',
     width: 300,
-    position: { x: 450, y: 310 },
+    position: { x: 400, y: 260 },
     data: {
       icon: 'fa-chevron-right',
       handles: defaultHandles(['left', 'right'])
@@ -120,45 +113,45 @@ const nodes: Node[] = [
     type: 'custom',
     label: 'BioMat: Morpho ID',
     width: 300,
-    position: { x: 450, y: 20 },
+    position: { x: 400, y: 60 },
     data: {
       icon: 'fa-chevron-right',
       handles: defaultHandles(['left', 'right'])
     }
   },
+  // {
+  //   id: 'biomat-id-mol',
+  //   type: 'custom',
+  //   label: 'BioMat: Molecular ID',
+  //   width: 300,
+  //   position: { x: 450, y: 100 },
+  //   data: {
+  //     icon: 'fa-chevron-right',
+  //     handles: defaultHandles(['left', 'right'])
+  //   }
+  // },
   {
-    id: 'biomat-id-mol',
+    id: 'external',
     type: 'custom',
-    label: 'BioMat: Molecular ID',
-    width: 300,
-    position: { x: 450, y: 100 },
+    label: 'Ext. occurrences',
+    width: 280,
+    position: { x: 800, y: 450 },
     data: {
-      icon: 'fa-chevron-right',
-      handles: defaultHandles(['left', 'right'])
+      icon: 'fa-box',
+      handles: defaultHandles(['top']),
+      target: 'external'
     }
   },
   {
-    id: 'external-biomat',
+    id: 'identification',
     type: 'custom',
-    label: 'Ext. bio. material',
-    width: 300,
-    position: { x: 1000, y: 450 },
+    label: 'Identification',
+    width: 280,
+    position: { x: 800, y: 200 },
     data: {
       icon: 'fa-box',
-      handles: defaultHandles(['left']),
-      target: 'external-biomat'
-    }
-  },
-  {
-    id: 'external-seq',
-    type: 'custom',
-    label: 'External sequence',
-    width: 300,
-    position: { x: 1000, y: 550 },
-    data: {
-      icon: 'fa-box',
-      handles: defaultHandles(['left']),
-      target: 'external-sequence'
+      handles: defaultHandles(['left', 'bot', 'top']),
+      items: [{ title: 'Curator', appendIcon: 'fas fa-user' }, { title: 'Date' }]
     }
   }
 ]
@@ -217,7 +210,7 @@ const edges: Edge[] = [
   {
     id: 'seqid-taxon',
     source: 'seqid',
-    target: 'taxon',
+    target: 'identification',
     sourceHandle: 'right',
     targetHandle: 'left',
     animated: true,
@@ -226,7 +219,7 @@ const edges: Edge[] = [
   {
     id: 'specimen-taxon',
     source: 'specimen-id',
-    target: 'taxon',
+    target: 'identification',
     sourceHandle: 'right',
     targetHandle: 'left',
     animated: true,
@@ -235,16 +228,7 @@ const edges: Edge[] = [
   {
     id: 'biomat-taxon-morpho',
     source: 'biomat-id-morpho',
-    target: 'taxon',
-    sourceHandle: 'right',
-    targetHandle: 'left',
-    animated: true,
-    type: 'bezier'
-  },
-  {
-    id: 'biomat-taxon-mol',
-    source: 'biomat-id-mol',
-    target: 'taxon',
+    target: 'identification',
     sourceHandle: 'right',
     targetHandle: 'left',
     animated: true,
@@ -269,7 +253,7 @@ const edges: Edge[] = [
   },
   {
     id: 'taxon-ext-seq',
-    target: 'taxon',
+    target: 'identification',
     source: 'external-seq',
     targetHandle: 'bot',
     sourceHandle: 'left',
@@ -277,11 +261,20 @@ const edges: Edge[] = [
   },
   {
     id: 'taxon-ext-biomat',
-    target: 'taxon',
-    source: 'external-biomat',
+    target: 'identification',
+    source: 'external',
     targetHandle: 'bot',
     sourceHandle: 'left',
     animated: true
+  },
+  {
+    id: 'id-taxon',
+    source: 'identification',
+    target: 'taxonomy',
+    sourceHandle: 'top',
+    targetHandle: 'bot',
+    markerEnd: { type: MarkerType.ArrowClosed, color: 'dodgerblue' }
+    // animated: true
   }
 ]
 </script>

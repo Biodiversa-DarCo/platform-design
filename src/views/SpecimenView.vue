@@ -141,7 +141,7 @@ const nodeDefinitions: Node[] = [
     data: {
       icon: 'fa-list',
       handles: defaultHandles(['left']),
-      items: [{ title: 'Kind' }, { title: 'Value' }]
+      items: [{ title: 'Work in progress' }]
     }
   },
   {
