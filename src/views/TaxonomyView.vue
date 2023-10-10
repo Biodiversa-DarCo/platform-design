@@ -14,12 +14,7 @@
       and to allow importing part of it as an initial seed for a possibly richer taxonomy.
     </p>
 
-    <DetailWorkflow
-      :nodes="nodes"
-      :edges="edges"
-      v-bind="$attrs"
-      :style="{ height: '400px !important' }"
-    >
+    <DetailWorkflow :nodes="nodes" :edges="edges" v-bind="$attrs" :style="{ height: '400px' }">
     </DetailWorkflow>
     <GiscusWrapper term="Identification"></GiscusWrapper>
   </v-container>

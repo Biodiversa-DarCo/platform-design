@@ -1,7 +1,7 @@
 <template>
   <div ref="flowContainer" id="workflow-container">
     <VueFlow
-      :class="isFullscreen ? 'fullscreen' : ''"
+      :class="flowClass"
       :nodes="nodes"
       :edges="edges"
       :style="style"
@@ -42,7 +42,7 @@ export interface Node extends FlowNode<WorkflowNodeData> {}
 import type { Edge, Node as FlowNode } from '@vue-flow/core'
 
 import { useRoute } from 'vue-router'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { VueFlow, useVueFlow, Panel, PanelPosition } from '@vue-flow/core'
 import DetailWorkflowNode from './DetailWorkflowNode.vue'
 import MainWorkflowNode from './MainWorkflowNode.vue'
@@ -58,11 +58,16 @@ async function toggleFullscreen(): Promise<void> {
   isFullscreen.value = !isFullscreen.value
 }
 
-defineProps<{
+const props = defineProps<{
   nodes: Node[]
   edges: Edge[]
   style?: CSSProperties
+  class?: string
 }>()
+
+const flowClass = computed(() => {
+  return (props.class ?? '') + (isFullscreen.value ? 'fullscreen' : '')
+})
 
 const defaultEdgeOptions = {
   type: 'step',
@@ -77,7 +82,7 @@ const defaultEdgeOptions = {
   width: 100%;
   height: calc(100vh - 300px);
   &.fullscreen {
-    height: 100vh;
+    height: 100vh !important;
     width: 100vw;
     position: fixed;
     top: 0;
