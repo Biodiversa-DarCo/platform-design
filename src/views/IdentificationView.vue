@@ -7,16 +7,27 @@
       takes priority over morphological assignment.
     </p>
     <p class="mb-3">
-      Molecular identification predominates of morphological criteria. As a result, we make a round
-      trip from the level of biological material where identification is done on the basis of
-      morphological traits, to the level of sequence where we can get a molecular identification.
-      This molecular identification propagates back at the level of the specimen of which the DNA
-      was extracted, and then to the biological material.
+      A biological material bundle is defined as a collection of specimens that were assigned to the
+      same taxonomic group on morphological criteria. After sequencing, some taxonomic heterogeneity
+      may appear within the bundle. Each sequenced specimen is tagged with a molecular assignment,
+      and each of them is accessible from the bundle, taking precedence over the initial
+      morphological assignment. A bundle may be split into several ones at any time, and does not
+      have to be homogeneous with regard to molecular taxonomic assignments derived from its
+      content.
     </p>
     <p class="mb-3">
-      A biological material bundle is defined as a collection of specimen in the same taxonomic
-      group. Whenever some heterogeneity is discovered within a biological material bundle, it
-      should be split as two distinct ones.
+      The molecular assignment for a specimen is derived from one of its sequences. Among the
+      sequences derived from a specimen, a single one (defaulting to the first created) is tagged as
+      the reference sequence, which indicates that the specimen should be assigned the same taxon as
+      this sequence. Afterwards, other sequences from this specimen may automatically receive the
+      same assignment as the reference one. Any discrepancy between taxonomic assignments on
+      sequences of the same specimen is signaled to the users.
+    </p>
+    <p class="mb-3">
+      External occurrence data follow roughly the same principles. External sequences and biological
+      samples are tagged with a taxonomic assignment. External sequences may, or may not, be related
+      to a biological sample: in this case, their molecular assignment takes precedence over the
+      taxonomic assignment of the biological sample.
     </p>
 
     <DetailWorkflow :nodes="nodes" :edges="edges" v-bind="$attrs" />
